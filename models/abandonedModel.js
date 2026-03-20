@@ -46,6 +46,12 @@ var abondendSchema = new mongoose.Schema(
       price:{
         type:Number,
       },
+      color: {
+        type: String,
+      },
+      size: {
+        type: String,
+      },
     }],
     totalPrice:{
       type:Number,
@@ -62,8 +68,20 @@ var abondendSchema = new mongoose.Schema(
     finalAmount:{
       type:Number,
     },
+    paymentInfo: {
+      orderCreationId: {
+        type: String,
+      },
+      razorpayPaymentId: {
+        type: String,
+      },
+      razorpayOrderId: {
+        type: String,
+      },
+    },
     orderCalled:{
       type:String,
+      default: "pending",
     },
   },
   {
@@ -77,12 +95,24 @@ abondendSchema.pre("save", async function (next) {
       let latestOrderNumber = 0;
 
       if (latestOrder && latestOrder.orderNumber) {
-        latestOrderNumber = parseInt(latestOrder.orderNumber.replace(/[^\d]/g, ''), 10);
+        const extractedOrderNumber = parseInt(
+          latestOrder.orderNumber.replace(/[^\d]/g, ''),
+          10
+        );
+        latestOrderNumber = Number.isNaN(extractedOrderNumber) ? 0 : extractedOrderNumber;
       }
 
       const tagPrefix ="YM000";
-      const newOrderNumber = `${tagPrefix}${latestOrderNumber + 1}`;
-      this.orderNumber = newOrderNumber;
+      let nextOrderNumber = latestOrderNumber + 1;
+      let generatedOrderNumber = `${tagPrefix}${nextOrderNumber}`;
+
+      // Ensure uniqueness in case of concurrent writes.
+      while (await this.constructor.exists({ orderNumber: generatedOrderNumber })) {
+        nextOrderNumber += 1;
+        generatedOrderNumber = `${tagPrefix}${nextOrderNumber}`;
+      }
+
+      this.orderNumber = generatedOrderNumber;
     }
     next();
   } catch (error) {

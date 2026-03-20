@@ -714,35 +714,69 @@ const CheckoutPage = () => {
       razorpayPaymentId: `COD`,
       razorpayOrderId: "COD",
     },
-    shippingInfo: { firstname, lastname, email, phone, address, city, state, pincode }
+    shippingInfo: {
+      firstname,
+      lastname,
+      email,
+      phone: normalizePhone(phone),
+      address,
+      city,
+      state,
+      pincode
+    }
   }
 
   const [hasAbandonedBeenCreated, setHasAbandonedBeenCreated] = useState(false);
+  const [isCreatingAbandoned, setIsCreatingAbandoned] = useState(false);
+
+  function normalizePhone(value) {
+    return String(value || "").replace(/\D/g, "");
+  }
 
   const createAbandonedCart = async () => {
+    if (isCreatingAbandoned || hasAbandonedBeenCreated) return false;
+
+    setIsCreatingAbandoned(true);
     try {
       const response = await fetch("/api/abandoned/create-abandoned", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(abandoneddata),
       });
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok || !data?.success) {
+        console.error("Abandoned cart API failed:", data?.error || response.statusText);
+        return false;
+      }
+
+      return true;
     } catch (error) {
-      console.log("Error creating abandoned cart:", error);
+      console.error("Error creating abandoned cart:", error);
+      return false;
+    } finally {
+      setIsCreatingAbandoned(false);
     }
   };
 
   useDebounce(() => {
+    const sanitizedPhone = normalizePhone(phone);
+
     if (
-      firstname !== "" &&
-      phone?.length === 10 &&
-      !hasAbandonedBeenCreated
+      firstname?.trim() !== "" &&
+      sanitizedPhone.length === 10 &&
+      !hasAbandonedBeenCreated &&
+      !isCreatingAbandoned
     ) {
-      if (cartItems?.length > 0) {
-        createAbandonedCart();
-        setHasAbandonedBeenCreated(true);
+      if (cartItems?.length > 0 && orderItems?.length > 0) {
+        createAbandonedCart().then((isCreated) => {
+          if (isCreated) {
+            setHasAbandonedBeenCreated(true);
+          }
+        });
       }
     }
-  }, 2000, [firstname, phone, cartItems]);
+  }, 2000, [firstname, phone, cartItems, orderItems, hasAbandonedBeenCreated, isCreatingAbandoned]);
 
   // Cloudinary image optimization
   const modifyCloudinaryUrl = (url) => {
