@@ -1,0 +1,469 @@
+/* HeroSection.module.css */
+
+.heroSection {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+}
+
+/* Modern Slide Container */
+.slideContainer {
+  position: relative;
+  width: 100%;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+}
+
+/* Slide with modern transition */
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.05);
+  transition: all 800ms cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+}
+
+.slide.active {
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  z-index: 2;
+}
+
+/* Image Wrapper with overlay */
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+}
+
+/* Modern Image Styling */
+.heroImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  filter: brightness(0.95);
+  transition: filter 500ms ease;
+}
+
+.slide.active .heroImage {
+  filter: brightness(1);
+}
+
+/* Modern Gradient Overlay */
+.imageWrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0) 50%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 800ms ease;
+}
+
+.slide.active .imageWrapper::after {
+  opacity: 1;
+}
+
+/* Modern Skeleton Loading */
+.skeletonContainer {
+  position: relative;
+  width: 100%;
+  min-height: 600px;
+  background: #f0f0f0;
+  overflow: hidden;
+}
+
+.skeletonImage {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Modern Content Overlay */
+.contentOverlay {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  transform: translateY(-50%);
+  z-index: 3;
+  max-width: 600px;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  animation: slideInUp 1s ease forwards;
+}
+
+.slideTitle {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.slideDescription {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+  animation: fadeInUp 1s ease forwards;
+  animation-delay: 0.2s;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.slideButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  background: white;
+  color: #333;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  animation: fadeInUp 1.2s ease forwards;
+  animation-delay: 0.4s;
+  opacity: 0;
+  animation-fill-mode: forwards;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.slideButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  background: #f8f8f8;
+}
+
+/* Modern Navigation Dots */
+.navigation {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  gap: 15px;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.navDot {
+  width: 15px;
+  height: 15px;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.4);
+  border: none;
+  cursor: pointer;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.navDot::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  transform: translateX(-100%);
+  transition: transform 0ms linear;
+}
+
+.navDot.active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.navDot.active::after {
+  transform: translateX(0);
+  transition: transform 5s linear;
+}
+
+.navDot:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* Modern Arrow Navigation */
+.arrowNav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  transition: all 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.heroSection:hover .arrowNav {
+  opacity: 1;
+  visibility: visible;
+}
+
+.arrowNav:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.arrowPrev {
+  left: 20px;
+}
+
+.arrowNext {
+  right: 20px;
+}
+
+/* Modern Progress Bar */
+.progressBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.2);
+  z-index: 10;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff6b6b, #ff8e8e);
+  width: 0%;
+  transition: width 100ms linear;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .slideTitle {
+    font-size: 3.5rem;
+  }
+  
+  .slideDescription {
+    font-size: 1.1rem;
+  }
+  
+  .contentOverlay {
+    left: 5%;
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 1024px) {
+  
+  .slideContainer {
+    min-height: 500px;
+  }
+  
+  .skeletonContainer {
+    min-height: 500px;
+  }
+  
+  .slideTitle {
+    font-size: 3rem;
+  }
+  
+  .arrowNav {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  
+  .slideContainer {
+    min-height: 400px;
+  }
+  
+  .skeletonContainer {
+    min-height: 400px;
+  }
+  
+  .contentOverlay {
+    left: 20px;
+    right: 20px;
+    max-width: none;
+    text-align: center;
+  }
+  
+  .slideTitle {
+    font-size: 2.5rem;
+  }
+  
+  .slideDescription {
+    font-size: 1rem;
+  }
+  
+  .slideButton {
+    padding: 12px 24px;
+    font-size: 0.9rem;
+  }
+  
+  .navigation {
+    bottom: 20px;
+    gap: 10px;
+    padding: 8px 16px;
+  }
+  
+  .navDot {
+    width: 15px;
+  }
+  
+  .arrowNav {
+    display: none; /* Hide arrows on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .slideContainer {
+    min-height: 300px;
+  }
+  
+  .skeletonContainer {
+    min-height: 300px;
+  }
+  
+  .slideTitle {
+    font-size: 1.8rem;
+  }
+  
+  .slideDescription {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .slideButton {
+    padding: 10px 20px;
+    font-size: 0.85rem;
+  }
+  
+  .navigation {
+    bottom: 15px;
+    gap: 8px;
+  }
+  
+  .navDot {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+/* Optional: Video Background Support */
+.videoBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* Optional: Parallax Effect */
+.parallaxImage {
+  transform: scale(1.1);
+  transition: transform 0.1s linear;
+}
+
+/* Optional: Ken Burns Effect */
+.kenBurns .heroImage {
+  animation: kenBurns 15s ease infinite;
+}
+
+@keyframes kenBurns {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}

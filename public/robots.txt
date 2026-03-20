@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /404
+Disallow: /checkout
+Disallow: /search
+Disallow: /collections/undefined
+Disallow: /products/undefined
+Sitemap: https://unmejewels.com/sitemap.xml

@@ -1,0 +1,530 @@
+/* Base Styles */
+.section {
+  padding: 5rem 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header */
+.header .headerContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3rem;
+  gap: 10px;
+}
+
+@media (min-width: 768px) {
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    text-align: left;
+  }
+}
+
+.title {
+  font-size: 42px;
+  font-weight: 400;
+  text-align: center;
+  
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.instagramButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(131, 58, 180, 0.2);
+}
+
+.instagramButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(131, 58, 180, 0.3);
+}
+
+.instagramButton:active {
+  transform: translateY(0);
+}
+
+/* Grid */
+.grid {
+  /* display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); */
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 15px;
+  padding: 10px 0;
+  animation: fadeIn 0.6s ease-out;
+}
+
+.grid::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Card */
+.card {
+  position: relative;
+  background: white;
+  min-width: 280px;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  border: none;
+  animation: cardEntrance 0.6s ease-out backwards;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  aspect-ratio: 3/5;
+
+}
+
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(131, 58, 180, 0.15);
+}
+
+.card:focus-visible {
+  outline: 3px solid #833ab4;
+  outline-offset: 3px;
+}
+
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /* max-height: 300px; */
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.card:hover .image {
+  transform: scale(1.05);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  bottom: 10px;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.productWrapper {
+  background: white;
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  gap: 5px;
+  padding: 5px;
+  justify-content: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.overlay a {
+  width: 90%;
+}
+
+.productWrapper img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
+.productWrapper div {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.productWrapper .productTitle {
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.productWrapper .productPrice {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--primary-color);
+}
+
+/* Loading State */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  gap: 1.5rem;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #833ab4;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingText {
+  color: #666;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Error State */
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  text-align: center;
+  background: #fef2f2;
+  border-radius: 16px;
+  border: 2px dashed #fecaca;
+  gap: 1.5rem;
+}
+
+.errorIcon {
+  font-size: 2.5rem;
+}
+
+.errorText {
+  color: #dc2626;
+  font-size: 1rem;
+  margin: 0;
+  max-width: 400px;
+}
+
+.retryButton {
+  padding: 0.75rem 1.5rem;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.retryButton:hover {
+  background: #b91c1c;
+}
+
+/* Empty State */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  text-align: center;
+  gap: 1.5rem;
+}
+
+.emptyIcon {
+  color: #833ab4;
+  opacity: 0.5;
+}
+
+.emptyText {
+  color: #666;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.instagramLink {
+  color: #833ab4;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: color 0.3s ease;
+}
+
+.instagramLink:hover {
+  color: #fd1d1d;
+}
+
+/* Modal */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.modalBackdrop.closing {
+  animation: fadeOut 0.2s ease;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+.modal {
+  background: white;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal.closing {
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  to {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e5e5e5;
+  flex-shrink: 0;
+}
+
+.modalAccount {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #833ab4, #fd1d1d);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.modalUsername {
+  font-weight: 600;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.modalTimestamp {
+  color: #666;
+  margin: 0.125rem 0 0 0;
+  font-size: 0.75rem;
+}
+
+.modalClose {
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: #666;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.modalClose:hover {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.modalContent {
+  flex: 1;
+  overflow: auto;
+}
+
+.modalMedia {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000;
+  min-height: 300px;
+}
+
+.modalImage {
+  width: 100%;
+  max-height: 60vh;
+  object-fit: contain;
+}
+
+.modalVideo {
+  width: 100%;
+  max-height: 60vh;
+  object-fit: contain;
+}
+
+.modalCaption {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.modalCaption p {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+.modalFooter {
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.viewButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #833ab4, #fd1d1d);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.viewButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(131, 58, 180, 0.3);
+}
+
+.viewButton:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .section {
+    padding: 3rem 10px;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+}
+
+@media (max-width: 640px) {
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .modal {
+    max-height: 80vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .instagramButton {
+    width: 100%;
+    justify-content: center;
+  }
+}

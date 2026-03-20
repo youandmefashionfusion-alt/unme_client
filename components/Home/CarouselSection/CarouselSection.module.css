@@ -1,0 +1,306 @@
+/* components/CarouselSection.module.css */
+
+.carouselSection {
+  width: 100%;
+  padding: 40px 15px 60px;
+  background: #ffffff;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* ============================================
+   REUSABLE HEADING COMPONENT
+   ============================================ */
+
+.headingWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.headingLeft {
+  align-items: flex-start;
+}
+
+.headingRight {
+  align-items: flex-end;
+}
+
+.sectionTitle {
+  font-size: 32px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin: 0 0 8px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  position: relative;
+  text-transform: capitalize;
+}
+
+.titleUnderline {
+  width: 60px;
+  height: 3px;
+  background: var(--primary-color);
+  margin-top: 8px;
+  transition: width 0.3s ease;
+}
+
+.headingWrapper:hover .titleUnderline {
+  width: 80px;
+}
+
+.sectionSubtitle {
+  font-size: 16px;
+  color: #666;
+  margin: 8px 0 0;
+  font-weight: 400;
+  max-width: 600px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.headingLeft .sectionSubtitle {
+  text-align: left;
+}
+
+.headingRight .sectionSubtitle {
+  text-align: right;
+}
+
+/* View All Link */
+.viewAllLink {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  padding: 8px 16px;
+  background: #fff0f0;
+  border-radius: 30px;
+}
+
+.viewAllLink:hover {
+  background: var(--primary-color);
+  color: white;
+  gap: 10px;
+}
+
+.viewAllLink:hover .viewAllIcon {
+  transform: translateX(4px);
+}
+
+.viewAllIcon {
+  transition: transform 0.3s ease;
+}
+
+/* ============================================
+   CAROUSEL STYLES
+   ============================================ */
+
+.embla {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.emblaViewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+.emblaContainer {
+  display: flex;
+  gap: 20px;
+  padding: 10px 5px;
+}
+
+.emblaSlide {
+  flex: 0 0 calc(25% - 15px); /* 4 items per view with gap */
+  min-width: 0;
+  transition: transform 0.3s ease;
+}
+
+/* Responsive slides */
+@media (max-width: 1200px) {
+  .emblaSlide {
+    flex: 0 0 calc(33.33% - 14px); /* 3 items */
+  }
+}
+
+@media (max-width: 900px) {
+  .emblaSlide {
+    flex: 0 0 calc(50% - 10px); /* 2 items */
+  }
+}
+
+/* Navigation Buttons */
+.emblaButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  background: white;
+  border: 1px solid #f0f0f0;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.emblaButton:hover:not(:disabled) {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.emblaButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: #f8f8f8;
+}
+
+.prev {
+  left: -22px;
+}
+
+.next {
+  right: -22px;
+}
+
+/* Hide buttons on smaller screens */
+@media (max-width: 768px) {
+  .emblaButton {
+    display: none;
+  }
+}
+
+/* Progress Bar */
+.progressBar {
+  width: 100%;
+  height: 3px;
+  background: #f0f0f0;
+  margin-top: 30px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--primary-color);
+  transition: width 0.3s ease;
+  border-radius: 3px;
+}
+
+/* ============================================
+   MOBILE GRID
+   ============================================ */
+
+.mobileGrid {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobileGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 10px 0;
+  }
+
+  .gridItem {
+    width: 100%;
+  }
+
+  .embla {
+    display: none;
+  }
+
+  .viewAllLink {
+    position: relative;
+    top: 0;
+    right: 0;
+    transform: none;
+    margin-top: 15px;
+    display: inline-flex;
+    width: fit-content;
+  }
+
+  .headingWrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}
+
+/* ============================================
+   LOADING STATE
+   ============================================ */
+
+.loadingContainer {
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.loadingSpinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f0f0f0;
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .carouselSection {
+    padding: 30px 10px 40px;
+  }
+
+  .sectionTitle {
+    font-size: 24px;
+  }
+
+  .sectionSubtitle {
+    font-size: 14px;
+  }
+
+  .mobileGrid {
+    gap: 8px;
+  }
+
+  .titleUnderline {
+    width: 40px;
+  }
+
+  .headingWrapper:hover .titleUnderline {
+    width: 60px;
+  }
+}

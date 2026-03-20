@@ -1,0 +1,751 @@
+
+/* ── CSS Variables ────────────────────────────────────────── */
+.collectionPage {
+    --ink: #1A1612;
+    --ink-light: #4A4540;
+    --muted: #7A7067;
+    --cream: #FAF8F4;
+    --border: #E6E0D6;
+    --white: #FFFFFF;
+    --gold: #C9A84C;
+
+    padding: 0 0 80px;
+    background: var(--white);
+    
+    color: var(--ink);
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+/* ── Breadcrumb ───────────────────────────────────────────── */
+.breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    padding: 18px 0 0;
+    color: var(--muted);
+    margin-bottom: 24px;
+}
+
+.breadcrumb a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumb a:hover {
+    color: var(--ink);
+}
+
+.breadcrumb span:last-child {
+    color: var(--ink);
+    font-weight: 500;
+}
+
+/* ── Header ───────────────────────────────────────────────── */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 28px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.title {
+    
+    font-size: clamp(22px, 3vw, 36px);
+    font-weight: 500;
+    color: var(--ink);
+    margin: 0 0 4px;
+    line-height: 1.15;
+}
+
+.stats {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+}
+
+.productCount {
+    font-weight: 600;
+    color: var(--ink);
+}
+
+/* ── Mobile filter bar ────────────────────────────────────── */
+.mobileFilterBar {
+    display: none;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.mobileFilterButton {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 11px 16px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.2s;
+    white-space: nowrap;
+}
+
+.mobileFilterButton:hover {
+    border-color: var(--ink);
+}
+
+.filterBadge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 18px;
+    height: 18px;
+    background: var(--primary-color);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.mobileSortSelect {
+    flex: 1;
+    padding: 11px 36px 11px 14px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    
+    font-size: 13px;
+    color: var(--ink);
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%237A7067' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+}
+
+.mobileSortSelect:focus {
+    border-color: var(--ink);
+}
+
+/* ── Main layout ──────────────────────────────────────────── */
+.mainLayout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 32px;
+    align-items: start;
+}
+
+/* ── Sidebar ──────────────────────────────────────────────── */
+.filtersSidebar {
+    position: sticky;
+    top: 20px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.filtersHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+}
+
+.filtersHeader h3 {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+    margin: 0;
+}
+
+.resetButton {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+    transition: opacity 0.2s;
+}
+
+.resetButton:hover {
+    opacity: 0.7;
+}
+
+/* Filter section */
+.filterSection {
+    margin-bottom: 18px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.filterSection:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.filterSectionHeader {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+    border: none;
+    padding: 0;
+    
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.filterSectionHeader:hover {
+    color: var(--ink);
+}
+
+.filterSectionContent {
+    padding-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.filterCheckbox {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    cursor: pointer;
+    
+    font-size: 13px;
+    color: var(--ink-light);
+    transition: color 0.15s;
+}
+
+.filterCheckbox:hover {
+    color: var(--ink);
+}
+
+.filterCheckbox input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+.checkboxLabel {
+    flex: 1;
+}
+
+/* ── Toolbar ──────────────────────────────────────────────── */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.activeFilters {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+    flex: 1;
+}
+
+.filterPill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    
+    font-size: 11px;
+    color: var(--ink-light);
+}
+
+.filterPill button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    padding: 0;
+    transition: color 0.15s;
+}
+
+.filterPill button:hover {
+    color: var(--primary-color);
+}
+
+.clearAllBtn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    padding: 0;
+}
+
+.clearAllBtn:hover {
+    opacity: 0.7;
+}
+
+.sortWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.sortLabel {
+    
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+.sortSelect {
+    padding: 8px 30px 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    
+    font-size: 12px;
+    color: var(--ink);
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    background: var(--white);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%237A7067' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 9px center;
+    transition: border-color 0.2s;
+}
+
+.sortSelect:focus {
+    border-color: var(--ink);
+}
+
+/* ── Products ─────────────────────────────────────────────── */
+.productsMain {
+    min-width: 0;
+}
+
+.productsGrid {
+    display: grid;
+    gap: 16px;
+}
+
+.gridView {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.productCardWrapper {
+    width: 100%;
+}
+
+/* ── Skeleton loader ──────────────────────────────────────── */
+/*
+  DESIGN DECISION: Skeletons render INSIDE the grid as ghost cards,
+  so the layout doesn't jump and there's no blinking full-page spinner.
+*/
+.skeletonCard {
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    background: var(--white);
+}
+
+.skeletonImage {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: linear-gradient(90deg, var(--cream) 25%, #ede8e0 50%, var(--cream) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.skeletonBody {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.skeletonLine {
+    height: 12px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--cream) 25%, #ede8e0 50%, var(--cream) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.skeletonLineShort {
+    height: 12px;
+    width: 60%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--cream) 25%, #ede8e0 50%, var(--cream) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite 0.15s;
+}
+
+.skeletonPrice {
+    height: 16px;
+    width: 40%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--cream) 25%, #ede8e0 50%, var(--cream) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite 0.3s;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* ── Scroll trigger ───────────────────────────────────────── */
+/*
+  CRITICAL FIX:
+  This div is the IntersectionObserver target. It MUST:
+    1. Always be rendered in the DOM when hasMore=true
+    2. Have a guaranteed non-zero height so the observer can detect it
+    3. NOT contain a spinner — skeletons inside the grid replace that
+  The old code had min-height:500px on the container AND hid it when
+  not loading, both of which broke the mobile scroll trigger.
+*/
+.scrollTrigger {
+    height: 40px;
+    width: 100%;
+    margin-top: 8px;
+    /* Uncomment to debug: background: rgba(255,0,0,0.1); */
+}
+
+/* ── End / empty states ───────────────────────────────────── */
+.endMessage {
+    text-align: center;
+    padding: 36px 20px;
+    color: var(--muted);
+    
+    font-size: 13px;
+}
+
+.endMessage span {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    padding: 9px 20px;
+    border-radius: 30px;
+    display: inline-block;
+}
+
+.noData {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+    text-align: center;
+    border: 1px dashed var(--border);
+    border-radius: 4px;
+    background: var(--cream);
+}
+
+.noDataIcon {
+    font-size: 40px;
+    margin-bottom: 16px;
+}
+
+.noData p {
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--ink);
+    margin: 0 0 8px;
+}
+
+.noDataSub {
+    
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0 0 24px !important;
+}
+
+.noData button {
+    padding: 12px 28px;
+    background: var(--ink);
+    color: var(--white);
+    border: none;
+    border-radius: 3px;
+    
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.noData button:hover {
+    background: var(--primary-color);
+}
+
+/* ── Mobile filter drawer ─────────────────────────────────── */
+.mobileFilters {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    max-width: 300px;
+    height: 100vh;
+    height: 100dvh;
+    /* dynamic viewport height — fixes iOS Safari */
+    background: var(--white);
+    z-index: 1000;
+    transition: right 0.28s ease;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -4px 0 24px rgba(26, 22, 18, 0.12);
+}
+
+.mobileFilters.open {
+    right: 0;
+}
+
+.mobileFiltersHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.mobileFiltersHeader h3 {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ink);
+    margin: 0;
+}
+
+.mobileFiltersHeader button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.mobileFiltersHeader button:hover {
+    color: var(--ink);
+}
+
+.mobileFiltersContent {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    /* Smooth momentum scroll on iOS */
+    -webkit-overflow-scrolling: touch;
+}
+
+.mobileFiltersFooter {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 10px;
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.applyButton {
+    padding: 14px;
+    background: var(--ink);
+    color: var(--white);
+    border: none;
+    border-radius: 3px;
+    
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-align: center;
+}
+
+.applyButton:hover {
+    background: var(--primary-color);
+}
+
+.mobileFiltersFooter .resetButton {
+    padding: 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 3px;
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 22, 18, 0.45);
+    z-index: 999;
+    animation: fadeIn 0.2s ease;
+    backdrop-filter: blur(1px);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1200px) {
+    .mainLayout {
+        grid-template-columns: 210px 1fr;
+        gap: 24px;
+    }
+
+    .gridView {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 1024px) {
+    .mainLayout {
+        grid-template-columns: 190px 1fr;
+        gap: 20px;
+    }
+}
+
+/* ── 768px — go mobile ── */
+@media (max-width: 768px) {
+    .collectionPage {
+        padding-bottom: 60px;
+    }
+
+    .container {
+        padding: 0 14px;
+    }
+
+    .mainLayout {
+        grid-template-columns: 1fr;
+    }
+
+    /* Hide desktop sidebar */
+    .filtersSidebar {
+        display: none;
+    }
+
+    /* Show mobile bar */
+    .mobileFilterBar {
+        display: flex;
+    }
+
+    /* Hide desktop toolbar (active pills + sort shown in mobile bar instead) */
+    .toolbar {
+        display: none;
+    }
+
+    .gridView {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .header {
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 10px;
+    }
+
+    .gridView {
+        gap: 8px;
+    }
+
+    .title {
+        font-size: 18px;
+    }
+
+    .stats {
+        font-size: 12px;
+    }
+
+    .mobileFiltersFooter {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── Accessibility ── */
+@media (prefers-reduced-motion: reduce) {
+
+    .mobileFilters,
+    .overlay,
+    .skeletonImage,
+    .skeletonLine,
+    .skeletonLineShort,
+    .skeletonPrice {
+        animation: none;
+        transition: none;
+    }
+}

@@ -1,0 +1,97 @@
+.container {
+    padding: 20px 0px;
+    margin: 20px auto;
+    
+}
+.banners{
+    max-height:500px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.banners img{
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    object-position: center center;
+}
+.title {
+    font-size: 38px;
+    font-weight: 400;
+    text-align: center;
+    margin: 0 0 10px;
+    
+}
+
+.description {
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.productsSection {
+    margin: 40px auto;
+    max-width: 1400px;
+    padding:10px;
+}
+
+.productsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 20px;
+}
+
+.toggleBtn {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid var(--primary-color);
+    max-width: 300px;
+    margin: 20px auto 30px;
+}
+
+.productsSection .toggleBtnItem {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: none;
+    padding: 14px 0;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.productsSection .toggleBtnItem:nth-child(1) {
+    border-right: 1px solid var(--primary-color);
+}
+
+.productsSection .toggleBtnItem:hover {
+    background-color: #e0e0e0;
+}
+
+.activeBtn {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+.activeBtn:hover {
+    background-color: var(--primary-color);
+}
+
+.productCard {
+    position: relative;
+}
+
+
+@media screen and (max-width: 768px) {
+    .title {
+        font-size: 28px;
+    }
+
+    .productsGrid {
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+    }
+
+}

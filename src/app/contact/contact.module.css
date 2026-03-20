@@ -1,0 +1,659 @@
+.contactPage {
+  --red: #B5293F;
+  --red-dark: #8C1E30;
+  --ink: #1A1612;
+  --ink-light: #4A4540;
+  --muted: #7A7067;
+  --cream: #FAF8F4;
+  --border: #E6E0D6;
+  --white: #FFFFFF;
+  --gold: #C9A84C;
+
+  background: var(--white);
+  
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+.heroSection {
+  padding: 20px 0 60px;
+  text-align: center;
+  background: linear-gradient(180deg, var(--cream) 0%, var(--white) 100%);
+  border-bottom: 1px solid var(--border);
+}
+
+.heroContent {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.heroTitle {
+  
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0 0 16px;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.heroTitle::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: var(--red);
+  margin: 20px auto 0;
+}
+
+.heroText {
+  font-size: 1.125rem;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ============================================
+   MAIN LAYOUT
+   ============================================ */
+.mainLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  padding: 80px 0;
+}
+
+/* ============================================
+   LEFT SIDE - CONTACT INFO
+   ============================================ */
+.infoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* Info Card */
+.infoCard {
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 40px;
+}
+
+.infoCard h2 {
+  
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+.infoCard > p {
+  color: var(--muted);
+  font-size: 1rem;
+  margin: 0 0 40px;
+  line-height: 1.6;
+}
+
+/* Contact Items */
+.contactItems {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.contactItem {
+  display: flex;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.contactItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.iconWrapper {
+  width: 50px;
+  height: 50px;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  color: var(--red);
+}
+
+.contactText {
+  flex: 1;
+}
+
+.contactText h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.contactText p {
+  color: var(--ink-light);
+  font-size: 0.9375rem;
+  margin: 0 0 4px;
+  line-height: 1.5;
+}
+
+.contactText span {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+/* Brand Message */
+.brandMessage {
+  background: var(--ink);
+  border: 1px solid var(--border);
+  padding: 40px;
+  text-align: center;
+}
+
+.heartIcon {
+  width: 48px;
+  height: 48px;
+  color: var(--red);
+  margin: 0 auto 24px;
+  display: block;
+}
+
+.brandMessage h3 {
+  
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--white);
+  margin: 0 0 16px;
+}
+
+.brandMessage p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ============================================
+   RIGHT SIDE - CONTACT FORM
+   ============================================ */
+.formSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.formCard {
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 40px;
+  width: 100%;
+}
+
+.formCard h2 {
+  
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0 0 30px;
+  line-height: 1.2;
+}
+
+.contactForm {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.formGroup {
+  width: 100%;
+}
+
+.inputWrapper,
+.textareaWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 16px;
+  color: var(--muted);
+  z-index: 2;
+  width: 18px;
+  height: 18px;
+}
+
+.formInput,
+.formTextarea,
+.formSelect {
+  width: 100%;
+  padding: 14px 16px 14px 45px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  
+  font-size: 0.9375rem;
+  color: var(--ink);
+  transition: all 0.2s ease;
+}
+
+.formTextarea {
+  resize: vertical;
+  min-height: 120px;
+  padding-top: 16px;
+}
+
+.formSelect {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237A7067' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+}
+
+.formInput:focus,
+.formTextarea:focus,
+.formSelect:focus {
+  outline: none;
+  border-color: var(--ink);
+}
+
+.formInput::placeholder,
+.formTextarea::placeholder {
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+/* Submit Button */
+.submitButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 32px;
+  background: var(--ink);
+  color: var(--white);
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: var(--ink-light);
+}
+
+.buttonIcon {
+  width: 18px;
+  height: 18px;
+}
+
+/* ============================================
+   MAP SECTION
+   ============================================ */
+.mapSection {
+  padding: 80px 0;
+  background: var(--cream);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.mapContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.mapContainer h2 {
+  
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0 0 40px;
+  letter-spacing: -0.02em;
+}
+
+.mapContainer h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: var(--red);
+  margin: 20px auto 0;
+}
+
+.mapPlaceholder {
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 80px 40px;
+}
+
+.mapIcon {
+  width: 60px;
+  height: 60px;
+  color: var(--red);
+  margin: 0 auto 20px;
+  display: block;
+}
+
+.mapPlaceholder p {
+  font-size: 1.25rem;
+  color: var(--ink);
+  margin: 0 0 12px;
+  font-weight: 500;
+}
+
+.mapPlaceholder span {
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .mainLayout {
+    gap: 40px;
+    padding: 30px 0;
+  }
+
+  .infoCard,
+  .formCard {
+    padding: 30px;
+  }
+}
+
+@media (max-width: 900px) {
+  .mainLayout {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .infoSection {
+    order: 2;
+  }
+
+  .formSection {
+    order: 1;
+  }
+
+  .heroSection {
+    padding: 100px 0 50px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 20px;
+  }
+
+  .heroSection {
+    padding: 30px 0 40px;
+  }
+
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .heroTitle::after {
+    width: 50px;
+    margin: 16px auto 0;
+  }
+
+  .heroText {
+    font-size: 1rem;
+    padding: 0 20px;
+  }
+
+  .mainLayout {
+    padding: 50px 0;
+    gap: 30px;
+  }
+
+  .infoCard,
+  .formCard {
+    padding: 30px 25px;
+  }
+
+  .infoCard h2,
+  .formCard h2 {
+    font-size: 1.75rem;
+  }
+
+  .contactItem {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .iconWrapper {
+    margin: 0 auto;
+  }
+
+  .brandMessage {
+    padding: 30px 25px;
+  }
+
+  .brandMessage h3 {
+    font-size: 1.25rem;
+  }
+
+  .brandMessage p {
+    font-size: 0.9375rem;
+  }
+
+  .mapSection {
+    padding: 60px 0;
+  }
+
+  .mapContainer h2 {
+    font-size: 2rem;
+  }
+
+  .mapPlaceholder {
+    padding: 60px 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .heroSection {
+    padding: 30px 0 30px;
+  }
+
+  .heroTitle {
+    font-size: 1.75rem;
+  }
+
+  .heroTitle::after {
+    width: 40px;
+    margin: 14px auto 0;
+  }
+
+  .heroText {
+    font-size: 0.9375rem;
+    padding: 0 16px;
+  }
+
+  .mainLayout {
+    padding: 40px 0;
+    gap: 25px;
+  }
+
+  .infoCard,
+  .formCard {
+    padding: 25px 20px;
+  }
+
+  .infoCard h2,
+  .formCard h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .infoCard > p {
+    font-size: 0.9375rem;
+    margin-bottom: 30px;
+  }
+
+  .contactItems {
+    gap: 20px;
+  }
+
+  .contactItem {
+    padding: 15px 0;
+  }
+
+  .contactText h3 {
+    font-size: 0.9375rem;
+  }
+
+  .contactText p {
+    font-size: 0.875rem;
+  }
+
+  .contactText span {
+    font-size: 0.75rem;
+  }
+
+  .brandMessage {
+    padding: 25px 20px;
+  }
+
+  .heartIcon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 16px;
+  }
+
+  .brandMessage h3 {
+    font-size: 1.125rem;
+    margin-bottom: 12px;
+  }
+
+  .brandMessage p {
+    font-size: 0.875rem;
+  }
+
+  .formCard h2 {
+    margin-bottom: 25px;
+  }
+
+  .contactForm {
+    gap: 20px;
+  }
+
+  .formInput,
+  .formTextarea,
+  .formSelect {
+    padding: 12px 12px 12px 40px;
+    font-size: 0.875rem;
+  }
+
+  .inputIcon {
+    left: 12px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .submitButton {
+    padding: 14px 28px;
+    font-size: 0.8125rem;
+  }
+
+  .mapSection {
+    padding: 50px 0;
+  }
+
+  .mapContainer h2 {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+  }
+
+  .mapContainer h2::after {
+    width: 40px;
+    margin: 16px auto 0;
+  }
+
+  .mapPlaceholder {
+    padding: 40px 20px;
+  }
+
+  .mapIcon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .mapPlaceholder p {
+    font-size: 1rem;
+  }
+
+  .mapPlaceholder span {
+    font-size: 0.875rem;
+  }
+}
+
+/* Small phones */
+@media (max-width: 360px) {
+  .heroTitle {
+    font-size: 1.5rem;
+  }
+
+  .infoCard h2,
+  .formCard h2 {
+    font-size: 1.25rem;
+  }
+
+  .brandMessage h3 {
+    font-size: 1rem;
+  }
+
+  .mapContainer h2 {
+    font-size: 1.25rem;
+  }
+
+  .mapPlaceholder {
+    padding: 30px 15px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .submitButton,
+  .formInput,
+  .formTextarea,
+  .formSelect {
+    transition: none;
+  }
+}

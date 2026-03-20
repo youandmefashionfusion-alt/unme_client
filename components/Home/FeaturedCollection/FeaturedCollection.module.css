@@ -1,0 +1,382 @@
+/* components/FeaturedCollection.module.css */
+
+.featuredSection {
+  width: 100%;
+  padding: 10px;
+  background: #ffffff;
+  position: relative;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   COLLECTION BUTTONS
+   ============================================ */
+
+.buttonsWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.buttonsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  max-width: 100%;
+}
+
+.collectionBtn {
+  padding: 12px 28px;
+  background: white;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.collectionBtn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background: #fff8f8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(204, 0, 0, 0.08);
+}
+
+.activeBtn {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+  box-shadow: 0 4px 12px rgba(204, 0, 0, 0.2);
+}
+
+.activeBtn:hover {
+  background: var(--hover-color);
+  border-color: var(--hover-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(204, 0, 0, 0.25);
+}
+
+.collectionBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ============================================
+   PRODUCTS GRID
+   ============================================ */
+
+.productsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   VIEW ALL BUTTON
+   ============================================ */
+
+.viewAllContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.viewAllLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 36px;
+  background: transparent;
+  border: none;
+  color: var(--primary-color);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  border-radius: 50px;
+}
+
+.viewAllLink:hover {
+  background: var(--primary-color);
+  color: white;
+  gap: 15px;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(204, 0, 0, 0.2);
+}
+
+.arrowIcon {
+  width: 20px;
+  transition: transform 0.3s ease;
+}
+
+.viewAllLink:hover .arrowIcon {
+  transform: translateX(5px);
+}
+
+/* ============================================
+   LOADING STATES
+   ============================================ */
+
+.loadingState {
+  width: 100%;
+}
+
+.skeletonButtons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.skeletonButton {
+  width: 110px;
+  height: 46px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 50px;
+}
+
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.skeletonCard {
+  aspect-ratio: 3/4;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+.loadingProducts {
+  width: 100%;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loadingSpinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid #f0f0f0;
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* ============================================
+   NO PRODUCTS STATE
+   ============================================ */
+
+.noProducts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  background: #fafafa;
+  border-radius: 16px;
+  padding: 40px 20px;
+  margin: 20px 0;
+}
+
+.noProductsIcon {
+  width: 60px;
+  height: 60px;
+  color: #ccc;
+  margin-bottom: 15px;
+}
+
+.noProducts p {
+  color: #666;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 20px;
+}
+
+.resetBtn {
+  padding: 10px 24px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.resetBtn:hover {
+  background: var(--hover-color);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(204, 0, 0, 0.2);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+/* Large Desktop */
+@media (max-width: 1200px) {
+  .productsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  
+  .skeletonGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+
+  .productsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .skeletonGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .collectionBtn {
+    padding: 10px 24px;
+    font-size: 13px;
+  }
+
+  .skeletonButton {
+    width: 100px;
+    height: 42px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  .buttonsWrapper {
+    margin-bottom: 30px;
+  }
+
+  .buttonsContainer {
+    gap: 10px;
+  }
+
+  .collectionBtn {
+    padding: 8px 18px;
+    font-size: 12px;
+    border-width: 1.5px;
+  }
+
+  .productsGrid {
+    gap: 10px;
+    margin-bottom: 30px;
+  }
+
+  .viewAllLink {
+    padding: 12px 30px;
+    font-size: 14px;
+  }
+
+  .skeletonGrid {
+    gap: 10px;
+  }
+
+  .skeletonButton {
+    width: 90px;
+    height: 38px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+
+  .buttonsContainer {
+    gap: 8px;
+  }
+
+  .collectionBtn {
+    padding: 7px 14px;
+    font-size: 11px;
+  }
+
+  .productsGrid {
+    gap: 8px;
+  }
+
+  .viewAllLink {
+    padding: 10px 24px;
+    font-size: 13px;
+  }
+
+  .noProducts p {
+    font-size: 14px;
+  }
+
+  .resetBtn {
+    padding: 8px 20px;
+    font-size: 13px;
+  }
+
+  .skeletonButton {
+    width: 80px;
+    height: 34px;
+  }
+}
+
+/* Very Small Mobile */
+@media (max-width: 360px) {
+  .collectionBtn {
+    padding: 6px 12px;
+    font-size: 10px;
+  }
+}

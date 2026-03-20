@@ -1,0 +1,54 @@
+.ctaButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 40px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.ctaButton:hover::before {
+    left: 0;
+}
+
+.buttonText,
+.arrowIcon {
+    position: relative;
+    z-index: 1;
+}
+
+.arrowIcon {
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+}
+
+.buttonText {
+    transform: translateX(10px);
+    transition: all 0.3s ease;
+}
+
+.ctaButton:hover .arrowIcon {
+    opacity: 1;
+}
+
+.ctaButton:hover .buttonText {
+    transform: translateX(0);
+}
+
+.ctaButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(168, 134, 84, 0.3);
+}
+
+@media (max-width: 480px) {
+    .ctaButton {
+        padding: 12px 28px;
+        font-size: 14px;
+    }
+}

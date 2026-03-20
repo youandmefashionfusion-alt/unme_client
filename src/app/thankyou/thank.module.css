@@ -1,0 +1,652 @@
+
+.thankYouPage {
+  --red: #B5293F;
+  --red-dark: #8C1E30;
+  --ink: #1A1612;
+  --ink-light: #4A4540;
+  --muted: #7A7067;
+  --cream: #FAF8F4;
+  --border: #E6E0D6;
+  --white: #FFFFFF;
+  --gold: #C9A84C;
+  --green: #15803d;
+  --green-light: #f0fdf4;
+
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 20px 60px;
+  background: var(--cream);
+  color: var(--ink);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ============================================
+   BACKGROUND ELEMENTS
+   ============================================ */
+.backgroundElements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.floatingCircle1,
+.floatingCircle2,
+.floatingCircle3 {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--border);
+  opacity: 0.3;
+  animation: float 8s ease-in-out infinite;
+}
+
+.floatingCircle1 {
+  width: 300px;
+  height: 300px;
+  top: -100px;
+  left: -100px;
+  animation-delay: 0s;
+}
+
+.floatingCircle2 {
+  width: 200px;
+  height: 200px;
+  bottom: -50px;
+  right: -50px;
+  animation-delay: 2s;
+}
+
+.floatingCircle3 {
+  width: 150px;
+  height: 150px;
+  top: 50%;
+  right: 10%;
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
+/* ============================================
+   MAIN CONTAINER
+   ============================================ */
+.container {
+  max-width: 600px;
+  width: 100%;
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 60px 48px;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 20px 40px rgba(26, 22, 18, 0.08);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   SUCCESS ICON
+   ============================================ */
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.successIcon {
+  width: 80px;
+  height: 80px;
+  background: var(--green-light);
+  border: 1px solid var(--green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--green);
+  position: relative;
+}
+
+.successIcon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.sparkle {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  color: var(--gold);
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   CONTENT
+   ============================================ */
+.content {
+  text-align: center;
+}
+
+.title {
+  
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0 0 16px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.highlight {
+  color: var(--red);
+  font-style: italic;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: var(--muted);
+  margin: 0 0 40px;
+  line-height: 1.6;
+}
+
+/* ============================================
+   ORDER CARD
+   ============================================ */
+.orderCard {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  padding: 32px;
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+.orderHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.orderIcon {
+  width: 24px;
+  height: 24px;
+  color: var(--red);
+}
+
+.orderHeader h3 {
+  
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin: 0;
+}
+
+.orderDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detailItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.detailItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.detailLabel {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.detailValue {
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================
+   NEXT STEPS
+   ============================================ */
+.nextSteps {
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+.nextSteps h3 {
+  
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin: 0 0 24px;
+  text-align: center;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+.step:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(26, 22, 18, 0.05);
+}
+
+.stepIcon {
+  width: 40px;
+  height: 40px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--red);
+  flex-shrink: 0;
+}
+
+.stepContent {
+  flex: 1;
+}
+
+.stepContent h4 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stepContent p {
+  color: var(--muted);
+  font-size: 0.875rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ============================================
+   SUPPORT INFO
+   ============================================ */
+.supportInfo {
+  margin-bottom: 40px;
+  padding: 16px;
+  background: var(--cream);
+  border: 1px solid var(--border);
+}
+
+.supportText {
+  color: var(--ink-light);
+  font-size: 0.875rem;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.supportLink {
+  color: var(--red);
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.supportLink:hover {
+  border-bottom-color: var(--red);
+}
+
+/* ============================================
+   ACTION BUTTONS
+   ============================================ */
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.primaryButton,
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 24px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.primaryButton {
+  background: var(--ink);
+  color: var(--white);
+}
+
+.primaryButton:hover {
+  background: var(--ink-light);
+}
+
+.primaryButton svg {
+  transition: transform 0.2s ease;
+}
+
+.primaryButton:hover svg {
+  transform: translateX(4px);
+}
+
+.secondaryButton {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--border);
+}
+
+.secondaryButton:hover {
+  background: var(--cream);
+  border-color: var(--ink);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .thankYouPage {
+    padding: 20px 16px 40px;
+  }
+
+  .container {
+    padding: 40px 24px;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .subtitle {
+    font-size: 0.9375rem;
+    margin-bottom: 30px;
+  }
+
+  .orderCard {
+    padding: 24px;
+    margin-bottom: 30px;
+  }
+
+  .orderHeader h3 {
+    font-size: 1.125rem;
+  }
+
+  .detailLabel {
+    font-size: 0.875rem;
+  }
+
+  .detailValue {
+    font-size: 0.9375rem;
+  }
+
+  .nextSteps {
+    margin-bottom: 30px;
+  }
+
+  .nextSteps h3 {
+    font-size: 1.125rem;
+  }
+
+  .step {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .stepIcon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .stepIcon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .stepContent h4 {
+    font-size: 0.875rem;
+  }
+
+  .stepContent p {
+    font-size: 0.8125rem;
+  }
+
+  .supportInfo {
+    margin-bottom: 30px;
+    padding: 12px;
+  }
+
+  .supportText {
+    font-size: 0.8125rem;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    padding: 14px 20px;
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .thankYouPage {
+    padding: 20px 10px 30px;
+  }
+
+  .container {
+    padding: 30px 10px;
+  }
+
+  .successIcon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .successIcon svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .sparkle {
+    width: 40px;
+    height: 40px;
+    right: -5px;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.875rem;
+    margin-bottom: 25px;
+  }
+
+  .orderCard {
+    padding: 20px;
+    margin-bottom: 25px;
+  }
+
+  .orderHeader {
+    gap: 8px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+  }
+
+  .orderIcon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .orderHeader h3 {
+    font-size: 1rem;
+  }
+
+  .detailItem {
+    padding: 8px 0;
+  }
+
+  .detailLabel {
+    font-size: 0.8125rem;
+  }
+
+  .detailValue {
+    font-size: 0.875rem;
+  }
+
+  .nextSteps h3 {
+    font-size: 1rem;
+    margin-bottom: 16px;
+  }
+
+  .steps {
+    gap: 12px;
+  }
+
+  .step {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .stepIcon {
+    margin: 0 auto;
+  }
+
+  .stepContent h4 {
+    font-size: 0.8125rem;
+  }
+
+  .stepContent p {
+    font-size: 0.75rem;
+  }
+
+  .supportInfo {
+    padding: 10px;
+  }
+
+  .supportText {
+    font-size: 0.75rem;
+  }
+
+  .actionButtons {
+    gap: 10px;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    padding: 12px 16px;
+    font-size: 0.75rem;
+  }
+
+  .floatingCircle1,
+  .floatingCircle2,
+  .floatingCircle3 {
+    display: none;
+  }
+}
+
+/* Small phones */
+@media (max-width: 360px) {
+  .container {
+    padding: 25px 10px;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .subtitle {
+    font-size: 0.8125rem;
+  }
+
+  .orderCard {
+    padding: 16px;
+  }
+
+  .detailLabel {
+    font-size: 0.75rem;
+  }
+
+  .detailValue {
+    font-size: 0.8125rem;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .floatingCircle1,
+  .floatingCircle2,
+  .floatingCircle3,
+  .sparkle,
+  .step,
+  .primaryButton,
+  .secondaryButton,
+  .container {
+    animation: none;
+    transition: none;
+  }
+
+  .primaryButton svg {
+    transition: none;
+  }
+}

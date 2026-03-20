@@ -1,0 +1,197 @@
+/* components/PromoCards.module.css */
+
+.promoSection {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 80px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Cards Grid */
+.cardsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+/* Individual Promo Card */
+.promoCard {
+    position: relative;
+    overflow: hidden;
+    height: auto;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Background Image */
+.cardImageWrapper {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.cardImage {
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.promoCard:hover .cardImage {
+    transform: scale(1.08);
+}
+
+/* Hover Overlay */
+.hoverOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+            #c4a574b3 0%,
+            rgba(0, 0, 0, 0) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 2;
+}
+
+.promoCard:hover .hoverOverlay {
+    opacity: 1;
+}
+
+/* Card Content */
+.cardContent {
+    position: relative;
+    z-index: 3;
+    padding: 90px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(to top,
+            rgba(0, 0, 0, 0.137) 0%,
+            rgba(0, 0, 0, 0) 60%);
+}
+
+/* Card Title */
+.cardTitle {
+    font-size: 35px;
+    font-weight: 400;
+    margin: 0 0 12px;
+    
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    color: black;
+}
+
+.cardsGrid .promoCard:hover .cardTitle {
+    color: white;
+}
+/* Card Subtitle */
+.cardSubtitle {
+    font-size: 13px;
+    margin: 0 0 32px;
+    max-width: 400px;
+    line-height: 1.5;
+    font-weight: 400;
+    color: rgb(93, 93, 93);
+}
+.cardsGrid .promoCard:hover .cardSubtitle {
+    color: white;
+}
+
+/* Card Button */
+.cardButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding-bottom: 4px;
+    transition: all 0.3s ease;
+    width: fit-content;
+    margin-top: auto;
+}
+.cardsGrid .promoCard:hover .cardButton {
+    color: white;
+}
+
+.buttonArrow {
+    display: flex;
+    align-items: center;
+}
+
+
+.cardsGrid .promoCard:hover .cardButton {
+    border-bottom:1px solid white;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .cardContent {
+        padding: 40px;
+    }
+
+    .cardTitle {
+        font-size: 40px;
+    }
+
+    .cardSubtitle {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .cardsGrid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .cardContent {
+        padding: 32px;
+    }
+
+    .cardTitle {
+        font-size: 36px;
+    }
+
+    .cardSubtitle {
+        font-size: 14px;
+        margin-bottom: 24px;
+    }
+
+    .cardButton {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cardsGrid {
+        gap: 16px;
+    }
+
+    .cardContent {
+        padding: 24px;
+    }
+
+    .cardTitle {
+        font-size: 28px;
+    }
+
+    .cardSubtitle {
+        font-size: 13px;
+        margin-bottom: 20px;
+    }
+
+    .cardButton {
+        font-size: 13px;
+    }
+}

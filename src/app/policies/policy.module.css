@@ -1,0 +1,138 @@
+.policy {
+    margin: 105px 8vw;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.policy h1 {
+    font-size: 3rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--primary-color);    
+    font-weight: 300;
+    margin-bottom: 40px;
+    text-align: center;
+    position: relative;
+    padding-bottom: 20px;
+  
+
+}
+
+.policy h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color) 100%);
+    border-radius: 2px;
+}
+
+.policy .bold {
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    color: var(--primary-color);
+    background: linear-gradient(135deg, #fdfbf2 0%, #fcf8e7 100%);
+    padding: 20px 25px;
+    border-radius: 12px;
+    border-left: 4px solid var(--primary-color);
+    margin-top: 30px;
+  
+
+}
+
+.policy p {
+    margin-bottom: 25px;
+    font-size: 1.1rem;
+    color: #4a5568;
+    line-height: 1.8;
+    text-align: justify;
+}
+
+.policy a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.policy a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.policy ul {
+    margin-bottom: 25px;
+    padding-left: 30px;
+}
+
+.policy li {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    color: #4a5568;
+    line-height: 1.7;
+}
+
+.policy .highlight {
+    background: linear-gradient(135deg, #fdfbf2 0%, #fcf8e7 100%);
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #fbb6ce;
+    margin: 25px 0;
+}
+
+.policy .contact-info {
+    background: linear-gradient(135deg, #fdfbf2 0%, #fcf8e7 100%);
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #9ae6b4;
+    margin: 25px 0;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+    .policy {
+        margin: 105px 5vw;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .policy {
+        margin: 105px 1rem;
+    }
+    
+    .policy h1 {
+        font-size: 2.2rem;
+        margin-bottom: 30px;
+    }
+    
+    .policy .bold {
+        font-size: 1.2rem;
+        padding: 15px 20px;
+    }
+    
+    .policy p {
+        font-size: 1rem;
+        text-align: left;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .policy h1 {
+        font-size: 1.8rem;
+    }
+    
+    .policy .bold {
+        font-size: 1.1rem;
+        padding: 12px 15px;
+    }
+    
+    .policy p {
+        font-size: 0.95rem;
+    }
+}

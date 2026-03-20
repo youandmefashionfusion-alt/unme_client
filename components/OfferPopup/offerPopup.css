@@ -1,0 +1,94 @@
+.offer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 9999;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Popup Box */
+.offer-popup {
+  background: #fff;
+  padding: 28px 24px;
+  width: 90%;
+  max-width: 360px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+  animation: popIn 0.35s ease-out;
+}
+
+.offer-popup h2 {
+  font-size: 26px;
+  margin-bottom: 8px;
+}
+
+.offer-popup p {
+  font-size: 18px;
+  color: #333;
+}
+
+.offer-popup strong {
+  color: #000;
+}
+
+.offer-popup button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #000;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.offer-popup button:hover {
+  opacity: 0.9;
+}
+
+/* 🎉 Confetti / Party Bomb */
+.confetti {
+  position: absolute;
+  top: -10px;
+  width: 8px;
+  height: 14px;
+  background: hsl(calc(360 * var(--i)), 90%, 60%);
+  animation: blast 2.5s ease-out forwards;
+}
+
+.confetti:nth-child(odd) {
+  background: #ff4d4d;
+}
+
+.confetti:nth-child(even) {
+  background: #4dd2ff;
+}
+
+/* Animations */
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes blast {
+  0% {
+    transform: translateY(0) rotate(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(700px) rotate(720deg);
+    opacity: 0;
+  }
+}

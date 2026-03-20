@@ -1,0 +1,279 @@
+/* components/FeaturesRibbon.module.css */
+
+.ribbonSection {
+    position: relative;
+    width: 100%;
+    background: #ffffff;
+    margin: 0px 0;
+    overflow: hidden;
+    z-index: 5;
+}
+
+/* Main Ribbon Container */
+.ribbonContainer {
+    position: relative;
+    background: #f8f4f0;  /* Soft warm background */
+    padding: 16px 0;
+    overflow: hidden;
+    border-top: 1px solid #e8e0d8;
+    border-bottom: 1px solid #e8e0d8;
+    z-index: 2;
+}
+
+/* Scrolling Content Wrapper */
+.scrollingContent {
+    display: flex;
+    width: fit-content;
+    animation: scroll 40s linear infinite;
+    will-change: transform;
+}
+
+/* Pause on hover */
+.ribbonContainer:hover .scrollingContent {
+    animation-play-state: paused;
+}
+
+/* Features List */
+.featuresList {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    padding: 0 30px;
+}
+
+/* Individual Feature Item */
+.featureItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.featureItem:hover {
+    color: var(--primary-color);  /* Brand color on hover */
+}
+
+/* Decorative separator */
+.featureItem::after {
+    content: '•';
+    position: absolute;
+    right: -35px;
+    color: var(--primary-color);
+    font-size: 16px;
+    opacity: 0.5;
+}
+
+/* Remove separator from last item */
+.featuresList:last-child .featureItem:last-child::after,
+.featureItem:last-child::after {
+    display: none;
+}
+
+/* Infinite Scroll Animation */
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Simple gradient overlays for fade effect */
+.ribbonContainer::before,
+.ribbonContainer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 100px;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.ribbonContainer::before {
+    left: 0;
+    background: linear-gradient(90deg, #f8f4f0 0%, transparent 100%);
+}
+
+.ribbonContainer::after {
+    right: 0;
+    background: linear-gradient(-90deg, #f8f4f0 0%, transparent 100%);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .featuresList {
+        gap: 50px;
+    }
+    
+    .featureItem {
+        font-size: 13px;
+    }
+    
+    .featureItem::after {
+        right: -30px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .ribbonSection {
+        margin: 0px 0;
+    }
+    
+    .ribbonContainer {
+        padding: 14px 0;
+    }
+    
+    .featuresList {
+        gap: 45px;
+    }
+    
+    .featureItem {
+        font-size: 12px;
+        letter-spacing: 0.4px;
+    }
+    
+    .featureItem::after {
+        right: -27px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    .ribbonSection {
+        margin: 0px 0;
+    }
+    
+    .ribbonContainer {
+        padding: 12px 0;
+    }
+    
+    .featuresList {
+        gap: 40px;
+        padding: 0 20px;
+    }
+    
+    .featureItem {
+        font-size: 11px;
+        letter-spacing: 0.3px;
+    }
+    
+    .featureItem::after {
+        right: -24px;
+        font-size: 12px;
+    }
+    
+    .ribbonContainer::before,
+    .ribbonContainer::after {
+        width: 60px;
+    }
+    
+    .scrollingContent {
+        animation: scroll 35s linear infinite;
+    }
+}
+
+@media (max-width: 480px) {
+    .ribbonSection {
+        margin: 0px 0;
+    }
+    
+    .ribbonContainer {
+        padding: 10px 0;
+    }
+    
+    .featuresList {
+        gap: 30px;
+        padding: 0 15px;
+    }
+    
+    .featureItem {
+        font-size: 10px;
+        font-weight: 600;
+    }
+    
+    .featureItem::after {
+        right: -20px;
+        font-size: 10px;
+    }
+    
+    .ribbonContainer::before,
+    .ribbonContainer::after {
+        width: 40px;
+    }
+    
+    .scrollingContent {
+        animation: scroll 30s linear infinite;
+    }
+}
+
+/* Optional: Dark background variant */
+.darkVariant {
+    background: #2a2a2a;
+}
+
+.darkVariant .featureItem {
+    color: #ffffff;
+}
+
+.darkVariant .featureItem:hover {
+    color: #ff6b6b;
+}
+
+.darkVariant::before,
+.darkVariant::after {
+    background: linear-gradient(90deg, #2a2a2a 0%, transparent 100%);
+}
+
+.darkVariant::after {
+    background: linear-gradient(-90deg, #2a2a2a 0%, transparent 100%);
+}
+
+/* Minimal variant */
+.minimalVariant {
+    background: transparent;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.minimalVariant .featureItem {
+    color: #666;
+    font-weight: 400;
+}
+
+.minimalVariant .featureItem:hover {
+    color: #000;
+}
+
+.minimalVariant .featureItem::after {
+    color: #999;
+    opacity: 0.3;
+}
+
+.minimalVariant::before,
+.minimalVariant::after {
+    background: linear-gradient(90deg, #ffffff 0%, transparent 100%);
+}
+
+.minimalVariant::after {
+    background: linear-gradient(-90deg, #ffffff 0%, transparent 100%);
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .scrollingContent {
+        animation: none;
+    }
+    
+    .ribbonContainer:hover .scrollingContent {
+        animation-play-state: running;
+    }
+}

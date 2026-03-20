@@ -1,0 +1,747 @@
+/* Hero Section  */
+/* components/HeroSection.module.css */
+
+.heroSection {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    padding: 10px 20px 10px;
+    overflow: hidden;
+}
+
+/* Decorative Background Elements */
+.decorativeElements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.decoration {
+    position: absolute;
+    opacity: 0.4;
+    animation: float 6s ease-in-out infinite;
+}
+
+.decoration1 {
+    top: 5%;
+    left: 8%;
+    animation-delay: 0s;
+}
+
+.decoration2 {
+    top: 15%;
+    right: 12%;
+    animation-delay: 1s;
+}
+
+.decoration3 {
+    top: 30%;
+    right: 5%;
+    animation-delay: 2s;
+}
+
+.decoration4 {
+    top: 45%;
+    left: 3%;
+    animation-delay: 1.5s;
+}
+
+.decoration5 {
+    bottom: 20%;
+    right: 8%;
+    animation-delay: 3s;
+}
+
+.decoration6 {
+    bottom: 35%;
+    left: 10%;
+    animation-delay: 2.5s;
+}
+
+.decoration7 {
+    bottom: 15%;
+    right: 15%;
+    animation-delay: 0.5s;
+}
+
+.decoration8 {
+    bottom: 8%;
+    left: 5%;
+    animation-delay: 4s;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-20px) rotate(10deg);
+    }
+}
+
+/* Container */
+.container {
+    position: relative;
+    z-index: 2;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Header Content */
+.headerContent {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.title {
+    font-size: 60px;
+    font-weight: 400;
+    color: #000;
+    margin: 0 0 10px;
+    
+    letter-spacing: -1px;
+}
+
+.subtitle {
+    font-size: 16px;
+    color: #333;
+    margin: 0 0 40px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+/* CTA Button with Hover Arrow */
+.ctaButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary-color);
+    color: white;
+    padding: 12px 40px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.ctaButton:hover::before {
+    left: 0;
+}
+
+.buttonText,
+.arrowIcon {
+    position: relative;
+    z-index: 1;
+}
+
+.arrowIcon {
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+}
+
+.buttonText {
+    transform: translateX(10px);
+    transition: all 0.3s ease;
+}
+
+.ctaButton:hover .arrowIcon {
+    opacity: 1;
+}
+
+.ctaButton:hover .buttonText {
+    transform: translateX(0);
+}
+
+.ctaButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(168, 134, 84, 0.3);
+}
+
+/* Cards Container */
+.cardsContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Individual Card */
+.card {
+    position: relative;
+    width: 275px;
+    max-height: 500px;
+    min-height: 300px;
+    border-radius: 24px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cardImage {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: all 0.5s ease;
+}
+
+/* Scroll to Top Button */
+.scrollTop {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    width: 50px;
+    height: 50px;
+    background: white;
+    border: 2px solid #a88654;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 100;
+    color: #a88654;
+}
+
+.scrollTop:hover {
+    background: #a88654;
+    color: white;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(168, 134, 84, 0.3);
+}
+
+
+
+/* components/FeaturesRibbon.module.css */
+
+.ribbonSection {
+    position: relative;
+    width: 100%;
+    background: transparent;
+    margin: 60px 0;
+    overflow: hidden;
+    transform: rotateZ(1deg);
+}
+
+/* Main Ribbon Container */
+.ribbonContainer {
+    border-top: 3px dashed #faf9f7;
+    border-bottom: 3px dashed #faf9f7;
+    border-width: 3px;
+    background-color: #4a3a2a;
+    padding: 15px 0;
+    position: relative;
+    overflow: hidden;
+
+}
+
+/* Scrolling Content Wrapper */
+.scrollingContent {
+    display: flex;
+    width: fit-content;
+    animation: scroll 5s linear infinite;
+}
+
+/* Pause animation on hover */
+.ribbonContainer:hover .scrollingContent {
+    animation-play-state: paused;
+}
+
+/* Features List */
+.featuresList {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    padding: 0 40px;
+    white-space: nowrap;
+}
+
+/* Individual Feature Item */
+.featureItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+/* Feature Icon (Swirl) */
+.featureItem img {
+    width: 24px;
+    height: 24px;
+}
+
+
+/* Feature Text */
+.featureText {
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* Infinite Scroll Animation */
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-20%);
+    }
+}
+
+
+
+
+
+
+/* Promo Section  */
+/* components/PromoCards.module.css */
+
+.promoSection {
+  width: 100%;
+  padding: 80px 20px;
+  background: linear-gradient(180deg, #fafaf8 0%, #f5f5f3 100%);
+}
+
+.promoSection .container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Cards Grid */
+.promoSection .cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+/* Individual Promo Card */
+.promoSection .promoCard {
+  position: relative;
+  border-radius: 32px;
+  overflow: hidden;
+  height: 400px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+.promoSection .promoCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+}
+
+/* Background Image */
+.promoSection .cardImageWrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.promoSection .cardImage {
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.promoSection .promoCard:hover .cardImage {
+  transform: scale(1.08);
+}
+
+/* Hover Overlay */
+.promoSection .hoverOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 2;
+}
+
+.promoSection .promoCard:hover .hoverOverlay {
+  opacity: 1;
+}
+
+/* Card Content */
+.promoSection .cardContent {
+  position: relative;
+  z-index: 3;
+  padding: 50px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  color: white;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Card Title */
+.promoSection .cardTitle {
+  font-size: 48px;
+  font-weight: 400;
+  margin: 0 0 12px;
+  
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+/* Card Subtitle */
+.promoSection .cardSubtitle {
+  font-size: 16px;
+  margin: 0 0 32px;
+  max-width: 400px;
+  line-height: 1.5;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Card Button */
+.promoSection .cardButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  padding-bottom: 4px;
+  transition: all 0.3s ease;
+  width: fit-content;
+  margin-top: auto;
+}
+
+.promoSection .cardButton:hover {
+  border-bottom-color: white;
+  gap: 12px;
+}
+
+.promoSection .buttonText {
+  transition: transform 0.3s ease;
+}
+
+.promoSection .buttonArrow {
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.promoSection .cardButton:hover .buttonArrow {
+  transform: translateX(4px);
+}
+
+/* First Card Specific Styling */
+.promoSection .cardsGrid .promoCard:first-child {
+  background: linear-gradient(135deg, rgba(212, 196, 176, 0.9) 0%, rgba(180, 160, 136, 0.8) 100%);
+}
+
+.promoSection .cardsGrid .promoCard:first-child .cardContent {
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0) 60%
+  );
+}
+
+/* Second Card Specific Styling */
+.promoSection .cardsGrid .promoCard:last-child {
+  background: linear-gradient(135deg, rgba(232, 228, 223, 0.9) 0%, rgba(200, 195, 188, 0.8) 100%);
+}
+
+.promoSection .cardsGrid .promoCard:last-child .cardContent {
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0) 60%
+  );
+}
+
+.promoSection .cardsGrid .promoCard:last-child .cardTitle,
+.promoSection .cardsGrid .promoCard:last-child .cardSubtitle {
+  color: #2c2420;
+  text-shadow: none;
+}
+
+.promoSection .cardsGrid .promoCard:last-child .cardButton {
+  color: #a88654;
+  border-bottom-color: rgba(168, 134, 84, 0.5);
+}
+
+.promoSection .cardsGrid .promoCard:last-child .cardButton:hover {
+  border-bottom-color: #a88654;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .promoSection {
+    padding: 60px 20px;
+  }
+
+  .promoSection .cardsGrid {
+    gap: 24px;
+  }
+
+  .promoSection .promoCard {
+    height: 350px;
+  }
+
+  .promoSection .cardContent {
+    padding: 40px;
+  }
+
+  .promoSection .cardTitle {
+    font-size: 40px;
+  }
+
+  .promoSection .cardSubtitle {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .promoSection {
+    padding: 40px 16px;
+  }
+
+  .promoSection .cardsGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .promoSection .promoCard {
+    height: 320px;
+    border-radius: 24px;
+  }
+
+  .promoSection .cardContent {
+    padding: 32px;
+  }
+
+  .promoSection .cardTitle {
+    font-size: 36px;
+  }
+
+  .promoSection .cardSubtitle {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .promoSection .cardButton {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .promoSection {
+    padding: 30px 12px;
+  }
+
+  .promoSection .cardsGrid {
+    gap: 16px;
+  }
+
+  .promoSection .promoCard {
+    height: 280px;
+    border-radius: 20px;
+  }
+
+  .promoSection .cardContent {
+    padding: 24px;
+  }
+
+  .promoSection .cardTitle {
+    font-size: 28px;
+  }
+
+  .promoSection .cardSubtitle {
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .promoSection .cardButton {
+    font-size: 13px;
+  }
+}
+
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .heroSection {
+        padding: 130px 20px 10px;
+    }
+
+    .title {
+        font-size: 56px;
+    }
+
+    .subtitle {
+        font-size: 16px;
+    }
+
+    .cardsContainer {
+        gap: 10px;
+    }
+
+    .decoration {
+        opacity: 0.3;
+    }
+
+    /* ribbon section  */
+    .ribbonContainer {
+        padding: 18px 0;
+    }
+
+    .featuresList {
+        gap: 60px;
+        padding: 0 30px;
+    }
+
+    .featureItem {
+        font-size: 13px;
+        gap: 10px;
+    }
+
+    .scrollingContent {
+        animation: scroll 25s linear infinite;
+    }
+}
+
+@media (max-width: 768px) {
+    .heroSection {
+        padding: 130px 5px 10px;
+        min-height: auto;
+    }
+
+    .title {
+        font-size: 42px;
+    }
+
+    .card {
+        min-height: 220px;
+    }
+
+    .subtitle {
+        font-size: 15px;
+        margin-bottom: 10px;
+    }
+
+    .scrollTop {
+        bottom: 24px;
+        right: 24px;
+        width: 45px;
+        height: 45px;
+    }
+
+    .decoration {
+        opacity: 0.2;
+    }
+
+    .decoration1,
+    .decoration3,
+    .decoration5,
+    .decoration7 {
+        display: none;
+    }
+
+    /* ribbon section  */
+    .ribbonSection {
+        margin: 40px 0;
+    }
+
+    .ribbonContainer {
+        padding: 16px 0;
+    }
+
+    .featuresList {
+        gap: 40px;
+        padding: 0 20px;
+    }
+
+    .featureItem {
+        font-size: 12px;
+        gap: 8px;
+    }
+
+    .scrollingContent {
+        animation: scroll 20s linear infinite;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 36px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+    }
+
+    .ctaButton {
+        padding: 12px 28px;
+        font-size: 14px;
+    }
+
+    .cardsContainer {
+        gap: 5px;
+    }
+
+    .card {
+        border-radius: 16px;
+        min-height: 150px;
+    }
+
+    .scrollTop {
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .decoration {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+
+    /* ribbbon section  */
+    .ribbonContainer {
+        padding: 14px 0;
+    }
+
+    .featuresList {
+        gap: 30px;
+        padding: 0 15px;
+    }
+
+    .featureItem {
+        font-size: 11px;
+        gap: 6px;
+    }
+
+    .scrollingContent {
+        animation: scroll 18s linear infinite;
+    }
+}
