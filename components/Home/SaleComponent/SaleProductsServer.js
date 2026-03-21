@@ -16,7 +16,7 @@ const SaleProductsServer = async ({ type }) => {
                 }
             }
              else if (type === '1499') {
-                const res = await fetch(`${process.env.API_PORT}products/sale-products1299?limit=8`, {
+                const res = await fetch(`${process.env.API_PORT}products/sale-products1499?limit=8`, {
                     cache: "no-store",
                 });
                 const json = await res.json();

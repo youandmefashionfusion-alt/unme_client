@@ -52,6 +52,12 @@ const SingleProduct = ({ product, products, latestProducts }) => {
   const discountPercent = product?.crossPrice
     ? Math.round(((product.crossPrice - product.price) / product.crossPrice) * 100)
     : 0
+  const productSizes =
+    Array.isArray(product?.sizes) && product.sizes.length > 0
+      ? product.sizes
+      : Array.isArray(product?.ringSize)
+        ? product.ringSize
+        : []
 
   const handleQuantityChange = (type) => {
     if (type === 'increase' && product?.quantity > quantity) setQuantity(q => q + 1)
@@ -193,7 +199,7 @@ const SingleProduct = ({ product, products, latestProducts }) => {
       content: (
         <ul className={`${styles.accordionBody} ${styles.specList}`}>
           {product?.material && <li><span>Material</span><span>{product.material.join(', ')}</span></li>}
-          {product?.weight && <li><span>Weight</span><span>{product.weight}</span></li>}
+          {productSizes.length > 0 && <li><span>Sizes</span><span>{productSizes.join(', ')}</span></li>}
           {product?.color && <li><span>Color</span><span>{product.color.join(', ')}</span></li>}
           {product?.gender && <li><span>Gender</span><span>{product.gender}</span></li>}
         </ul>

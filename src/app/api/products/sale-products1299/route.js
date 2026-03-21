@@ -9,9 +9,10 @@ export async function GET(req) {
 
     const gatawayJewels = await ProductModel.find({
       is1499Sale: true,
-      state: "active"
+      state: "active",
+      quantity: { $gt: 0 }
     })
-      .sort({ quantity: -1,updatedAt: -1 })
+      .sort({ quantity: -1, updatedAt: -1 })
       .limit(limit ? parseInt(limit) : 100);
 
     return new Response(

@@ -5,20 +5,20 @@ export async function GET(req) {
   try {
     await connectDb();
     const searchParams = new URL(req.url);
-    const limit = searchParams.searchParams.get('limit');
+    const limit = searchParams.searchParams.get("limit");
 
-    const gatawayJewels = await ProductModel.find({
-      is899Sale: true,
+    const saleProducts = await ProductModel.find({
+      is1499Sale: true,
       state: "active",
-      quantity: { $gt: 0 }
+      quantity: { $gt: 0 },
     })
       .sort({ quantity: -1, updatedAt: -1 })
-      .limit(limit ? parseInt(limit) : 100);
+      .limit(limit ? parseInt(limit, 10) : 100);
 
     return new Response(
       JSON.stringify({
         success: true,
-        data: gatawayJewels
+        data: saleProducts,
       }),
       { status: 200 }
     );
@@ -26,7 +26,7 @@ export async function GET(req) {
     return new Response(
       JSON.stringify({
         success: false,
-        error: error.message
+        error: error.message,
       }),
       { status: 500 }
     );

@@ -1,15 +1,13 @@
-import ProductModel from "../../../../models/productModel";
+import mongoose from "mongoose";
 import connectDb from "../../../../config/connectDb";
+import ProductModel from "../../../../models/productModel";
 
 export const config = {
   maxDuration: 20,
 };
 
-// ── Projection: only fields the frontend actually renders ─────────────────
-// Excluded (not needed on product page):
-//   metaDesc, metaTitle, bossPicks, gatawayJewels, isFeatured,
-//   is999Sale, is1499Sale, order, necklaceType, ringDesign, ringSize
 const PRODUCT_FIELDS = {
+  _id: 1,
   title: 1,
   handle: 1,
   price: 1,
@@ -19,7 +17,8 @@ const PRODUCT_FIELDS = {
   sku: 1,
   quantity: 1,
   material: 1,
-  weight: 1,
+  sizes: 1,
+  ringSize: 1,
   color: 1,
   gender: 1,
   type: 1,
@@ -30,12 +29,13 @@ const PRODUCT_FIELDS = {
   sold: 1,
   state: 1,
   updatedAt: 1,
-  metaTitle:1,
-  metaDesc:1,
+  metaTitle: 1,
+  metaDesc: 1,
+  saleCollections: 1,
 };
 
-// Lighter projection for cards (related / latest) — skip description & ratings
 const CARD_FIELDS = {
+  _id: 1,
   title: 1,
   handle: 1,
   price: 1,
@@ -48,7 +48,29 @@ const CARD_FIELDS = {
   totalRating: 1,
   state: 1,
   updatedAt: 1,
+  sizes: 1,
+  ringSize: 1,
 };
+
+function normalizeProductShape(product) {
+  if (!product) return product;
+
+  const normalizedProduct = { ...product };
+
+  if (!Array.isArray(normalizedProduct.sizes) && Array.isArray(normalizedProduct.ringSize)) {
+    normalizedProduct.sizes = normalizedProduct.ringSize;
+  }
+
+  if (Object.prototype.hasOwnProperty.call(normalizedProduct, "ringSize")) {
+    delete normalizedProduct.ringSize;
+  }
+
+  if (Object.prototype.hasOwnProperty.call(normalizedProduct, "weight")) {
+    delete normalizedProduct.weight;
+  }
+
+  return normalizedProduct;
+}
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -64,13 +86,18 @@ export async function GET(request) {
   try {
     await connectDb();
 
-    // ── Step 1: fetch the main product (must be first — related needs collectionHandle) ──
-    const product = await ProductModel.findOne(
-      { handle: productHandle, state: "active" },
-      PRODUCT_FIELDS
-    )
-      .populate("collectionName", "title handle")
-      .lean();
+    const productQuery = mongoose.Types.ObjectId.isValid(productHandle)
+      ? { state: "active", $or: [{ _id: productHandle }, { handle: productHandle }] }
+      : { handle: productHandle, state: "active" };
+
+    let productQueryBuilder = ProductModel.findOne(productQuery, PRODUCT_FIELDS)
+      .populate("collectionName", "title handle");
+
+    if (mongoose.models.SaleCollection) {
+      productQueryBuilder = productQueryBuilder.populate("saleCollections");
+    }
+
+    const product = await productQueryBuilder.lean();
 
     if (!product) {
       return Response.json(
@@ -79,29 +106,21 @@ export async function GET(request) {
       );
     }
 
-    // ── Step 2: fire related + latest queries IN PARALLEL ─────────────────
-    const [relatedProducts, latestProducts] = await Promise.all([
+    const relatedQuery = {
+      state: "active",
+      _id: { $ne: product._id },
+    };
 
-      // Related: same collection, exclude self.
-      // Sorting quantity:-1 bubbles in-stock items to the top —
-      // eliminates the original double-query / fallback entirely.
-      ProductModel.find(
-        {
-          state: "active",
-          collectionHandle: product.collectionHandle,
-          _id: { $ne: product._id },
-        },
-        CARD_FIELDS
-      )
+    if (product.collectionHandle) {
+      relatedQuery.collectionHandle = product.collectionHandle;
+    }
+
+    const [relatedProducts, latestProducts] = await Promise.all([
+      ProductModel.find(relatedQuery, CARD_FIELDS)
         .sort({ quantity: -1, updatedAt: -1 })
         .limit(4)
         .lean(),
-
-      // Latest: most recently updated active products site-wide
-      ProductModel.find(
-        { state: "active" },
-        CARD_FIELDS
-      )
+      ProductModel.find({ state: "active" }, CARD_FIELDS)
         .sort({ updatedAt: -1 })
         .limit(8)
         .lean(),
@@ -110,13 +129,12 @@ export async function GET(request) {
     return Response.json(
       {
         success: true,
-        product,
-        relatedProducts,
-        latestProducts,
+        product: normalizeProductShape(product),
+        relatedProducts: relatedProducts.map(normalizeProductShape),
+        latestProducts: latestProducts.map(normalizeProductShape),
       },
       { status: 200 }
     );
-
   } catch (error) {
     console.error("Error in single product API:", error.message);
     return Response.json(

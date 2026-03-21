@@ -236,12 +236,18 @@ const ViewProduct = ({ selectedProduct, setSelectedProduct, handleQuickViewAddTo
                   </div>
                 )}
 
-                {selectedProduct?.weight && (
+                {(Array.isArray(selectedProduct?.sizes) && selectedProduct.sizes.length > 0) ||
+                (Array.isArray(selectedProduct?.ringSize) && selectedProduct.ringSize.length > 0) ? (
                   <div className={styles.detailRow}>
-                    <span className={styles.detailLabel}>Weight:</span>
-                    <span className={styles.detailValue}>{selectedProduct.weight}</span>
+                    <span className={styles.detailLabel}>Sizes:</span>
+                    <span className={styles.detailValue}>
+                      {(selectedProduct?.sizes?.length
+                        ? selectedProduct.sizes
+                        : selectedProduct?.ringSize || []
+                      ).join(', ')}
+                    </span>
                   </div>
-                )}
+                ) : null}
 
                 {selectedProduct?.material && selectedProduct.material.length > 0 && (
                   <div className={styles.detailRow}>

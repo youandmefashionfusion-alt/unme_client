@@ -205,6 +205,12 @@ const ProductCardStatement = ({ product }) => {
         ((product.crossPrice - product.price) / product.crossPrice) * 100
       )
       : 0;
+  const selectedSizes =
+    Array.isArray(selectedProduct?.sizes) && selectedProduct.sizes.length > 0
+      ? selectedProduct.sizes
+      : Array.isArray(selectedProduct?.ringSize)
+        ? selectedProduct.ringSize
+        : [];
 
   const modifyCloudinaryUrl = (url) => {
     if (!url) return "";
@@ -295,10 +301,10 @@ const ProductCardStatement = ({ product }) => {
                       <span className={styles.specValue}>{selectedProduct.material.join(', ')}</span>
                     </div>
                   )}
-                  {selectedProduct?.weight && (
+                  {selectedSizes.length > 0 && (
                     <div className={styles.specItem}>
-                      <span className={styles.specLabel}>Weight</span>
-                      <span className={styles.specValue}>{selectedProduct.weight}</span>
+                      <span className={styles.specLabel}>Sizes</span>
+                      <span className={styles.specValue}>{selectedSizes.join(', ')}</span>
                     </div>
                   )}
                 </div>
