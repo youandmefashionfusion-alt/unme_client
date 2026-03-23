@@ -15,6 +15,7 @@ import toast from 'react-hot-toast'
 import Image from 'next/image'
 import { GTM } from '@/lib/gtm'
 import Link from 'next/link'
+import Perks from './Home/Perks/Perks'
 
 const SingleProduct = ({ product, products, latestProducts }) => {
   const dispatch = useDispatch()
@@ -39,7 +40,11 @@ const SingleProduct = ({ product, products, latestProducts }) => {
   const [hoverStar, setHoverStar] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [bottomBanner, setBottomBanner] = useState(null)
   const fileInputRef = useRef(null)
+  const galleryColumnRef = useRef(null)
+  const galleryStickyRef = useRef(null)
+  const infoSectionRef = useRef(null)
 
   const mediaList = product?.images || []
 
@@ -215,6 +220,114 @@ const SingleProduct = ({ product, products, latestProducts }) => {
     },
   ]
 
+  useEffect(() => {
+    const fetchBottomBanner = async () => {
+      try {
+        const response = await fetch('/api/home/banners', { cache: 'no-store' })
+        const data = await response.json()
+
+        if (data?.success) {
+          const otherBanners = data?.banners?.[0]?.otherBanners || []
+          setBottomBanner(otherBanners[4] || otherBanners[otherBanners.length - 1] || null)
+        }
+      } catch (error) {
+        console.error('Error fetching product page banner:', error)
+      }
+    }
+
+    fetchBottomBanner()
+  }, [])
+
+  useEffect(() => {
+    const stickyEl = galleryStickyRef.current
+    const columnEl = galleryColumnRef.current
+    const infoEl = infoSectionRef.current
+    if (!stickyEl || !columnEl || !infoEl || typeof window === 'undefined') return
+
+    const STICKY_TOP = 0
+    const desktopQuery = window.matchMedia('(min-width: 901px)')
+    let rafId = null
+
+    const resetSticky = () => {
+      stickyEl.style.position = 'relative'
+      stickyEl.style.top = '0px'
+      stickyEl.style.left = 'auto'
+      stickyEl.style.width = '100%'
+      stickyEl.style.zIndex = '2'
+      columnEl.style.minHeight = 'auto'
+    }
+
+    const updateSticky = () => {
+      rafId = null
+
+      if (!desktopQuery.matches) {
+        resetSticky()
+        return
+      }
+
+      const stickyHeight = stickyEl.offsetHeight
+      const infoRect = infoEl.getBoundingClientRect()
+      const infoTop = window.scrollY + infoRect.top
+      const infoBottom = infoTop + infoEl.offsetHeight
+      const columnRect = columnEl.getBoundingClientRect()
+
+      const start = infoTop - STICKY_TOP
+      const end = infoBottom - STICKY_TOP - stickyHeight
+
+      columnEl.style.minHeight = `${Math.max(infoEl.offsetHeight, stickyHeight)}px`
+
+      if (end <= start) {
+        resetSticky()
+        return
+      }
+
+      if (window.scrollY <= start) {
+        resetSticky()
+        return
+      }
+
+      stickyEl.style.position = 'fixed'
+      stickyEl.style.left = `${Math.round(columnRect.left)}px`
+      stickyEl.style.width = `${Math.round(columnRect.width)}px`
+      stickyEl.style.zIndex = '2'
+
+      if (window.scrollY < end) {
+        stickyEl.style.top = `${STICKY_TOP}px`
+      } else {
+        const topAfterEnd = STICKY_TOP - (window.scrollY - end)
+        stickyEl.style.top = `${topAfterEnd}px`
+      }
+    }
+
+    const requestUpdate = () => {
+      if (rafId !== null) return
+      rafId = window.requestAnimationFrame(updateSticky)
+    }
+
+    requestUpdate()
+    window.addEventListener('scroll', requestUpdate, { passive: true })
+    window.addEventListener('resize', requestUpdate)
+    if (desktopQuery.addEventListener) {
+      desktopQuery.addEventListener('change', requestUpdate)
+    } else {
+      desktopQuery.addListener(requestUpdate)
+    }
+
+    return () => {
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId)
+      }
+      window.removeEventListener('scroll', requestUpdate)
+      window.removeEventListener('resize', requestUpdate)
+      if (desktopQuery.removeEventListener) {
+        desktopQuery.removeEventListener('change', requestUpdate)
+      } else {
+        desktopQuery.removeListener(requestUpdate)
+      }
+      resetSticky()
+    }
+  }, [openAccordion, selectedIndex, mediaList.length])
+
   return (
     <div className={styles.productPage}>
 
@@ -222,63 +335,68 @@ const SingleProduct = ({ product, products, latestProducts }) => {
       <div className={styles.productGrid}>
 
         {/* Left: Gallery */}
-        <div className={styles.gallerySection}>
-          <div className={styles.mainImageWrap}>
-            {discountPercent > 0 && (
-              <span className={styles.saveBadge}>SAVE {discountPercent}%</span>
-            )}
-            <div className={styles.imageActionGroup}>
-              <button className={styles.imageActionBtn} onClick={() => setShowShareOptions(true)} aria-label="Share">
-                <Share2 size={16} />
-              </button>
-              <button
-                className={`${styles.imageActionBtn} ${isInWishlist ? styles.wishlisted : ''}`}
-                onClick={handleWishlistToggle}
-                aria-label="Wishlist"
-              >
-                <Heart size={16} fill={isInWishlist ? 'currentColor' : 'none'} />
-              </button>
-            </div>
+        <div className={styles.galleryColumn} ref={galleryColumnRef}>
+          <div className={styles.gallerySticky} ref={galleryStickyRef}>
+            <div className={styles.gallerySection}>
+              <div className={styles.mainImageWrap}>
+                {discountPercent > 0 && (
+                  <span className={styles.saveBadge}>SAVE {discountPercent}%</span>
+                )}
+                <div className={styles.imageActionGroup}>
+                  <button className={styles.imageActionBtn} onClick={() => setShowShareOptions(true)} aria-label="Share">
+                    <Share2 size={16} />
+                  </button>
+                  <button
+                    className={`${styles.imageActionBtn} ${isInWishlist ? styles.wishlisted : ''}`}
+                    onClick={handleWishlistToggle}
+                    aria-label="Wishlist"
+                  >
+                    <Heart size={16} fill={isInWishlist ? 'currentColor' : 'none'} />
+                  </button>
+                </div>
 
-            {mediaList[selectedIndex] && (
-              isVideo(mediaList[selectedIndex]?.url) ? (
-                <video controls className={styles.mainImage}>
-                  <source src={mediaList[selectedIndex]?.url} />
-                </video>
-              ) : (
-                <Image
-                  src={mediaList[selectedIndex]?.url}
-                  alt={product?.title}
-                  className={styles.mainImage}
-                  width={700} height={700}
-                  priority
-                />
-              )
-            )}
-          </div>
-
-          {mediaList.length > 1 && (
-            <div className={styles.thumbnailRow}>
-              {mediaList.map((media, idx) => (
-                <button
-                  key={idx}
-                  className={`${styles.thumb} ${selectedIndex === idx ? styles.thumbActive : ''}`}
-                  onClick={() => setSelectedIndex(idx)}
-                  aria-label={`View image ${idx + 1}`}
-                >
-                  {isVideo(media?.url) ? (
-                    <video src={media?.url} muted className={styles.thumbMedia} />
+                {mediaList[selectedIndex] && (
+                  isVideo(mediaList[selectedIndex]?.url) ? (
+                    <video controls className={styles.mainImage}>
+                      <source src={mediaList[selectedIndex]?.url} />
+                    </video>
                   ) : (
-                    <Image src={media?.url} alt={`View ${idx + 1}`} className={styles.thumbMedia} width={90} height={90} />
-                  )}
-                </button>
-              ))}
+                    <Image
+                      src={mediaList[selectedIndex]?.url}
+                      alt={product?.title}
+                      className={styles.mainImage}
+                      fill
+                      sizes="(max-width: 900px) 100vw, 48vw"
+                      priority
+                    />
+                  )
+                )}
+              </div>
+
+              {mediaList.length > 1 && (
+                <div className={styles.thumbnailRow}>
+                  {mediaList.map((media, idx) => (
+                    <button
+                      key={idx}
+                      className={`${styles.thumb} ${selectedIndex === idx ? styles.thumbActive : ''}`}
+                      onClick={() => setSelectedIndex(idx)}
+                      aria-label={`View image ${idx + 1}`}
+                    >
+                      {isVideo(media?.url) ? (
+                        <video src={media?.url} muted className={styles.thumbMedia} />
+                      ) : (
+                        <Image src={media?.url} alt={`View ${idx + 1}`} className={styles.thumbMedia} width={90} height={90} />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
 
         {/* Right: Product Info */}
-        <div className={styles.infoSection}>
+        <div className={styles.infoSection} ref={infoSectionRef}>
 
           <h1 className={styles.productTitle}>{product?.title}</h1>
 
@@ -386,6 +504,28 @@ const SingleProduct = ({ product, products, latestProducts }) => {
 
         </div>
       </div>
+
+      <section className={styles.bottomBannerSection}>
+        <div className={styles.mobileBannerWrapper}>
+          <Image
+            src="/images/banner/unme-banner-mobile.jpg"
+            alt="UNME quality banner"
+            width={1600}
+            height={900}
+            className={styles.mobileBannerImage}
+          />
+        </div>
+
+        {bottomBanner && (
+          <div className={styles.desktopBannerWrapper}>
+            <Perks
+              banner={bottomBanner}
+              className={styles.productBannerCenter}
+              containerStyle={{ width: '100%', maxWidth: '100%', margin: '0 auto' }}
+            />
+          </div>
+        )}
+      </section>
 
       {/* You May Also Like */}
       <section className={styles.relatedSection}>

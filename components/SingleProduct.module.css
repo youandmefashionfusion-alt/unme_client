@@ -16,7 +16,6 @@
   background: var(--white);
   /*  */
   color: var(--ink);
-  overflow-x: hidden;
 }
 
 /* ============================================================
@@ -24,17 +23,27 @@
    ============================================================ */
 .productGrid {
   display: grid;
-  grid-template-columns: 1fr 1.1fr;
-  gap: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+  gap: 24px;
   align-items: start;
+  overflow: visible;
 }
 
 /* ============================================================
    GALLERY
    ============================================================ */
-.gallerySection {
-  position: sticky;
+.galleryColumn {
+  position: relative;
+  align-self: start;
+}
+
+.gallerySticky {
+  position: relative;
   top: 0;
+  z-index: 2;
+}
+
+.gallerySection {
   padding: 0 10px;
   display: flex;
   flex-direction: column;
@@ -45,7 +54,8 @@
   position: relative;
   background: var(--cream);
   overflow: hidden;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 1 / 1;
+  width: 100%;
 }
 
 .mainImage {
@@ -125,7 +135,8 @@
   overflow-x: auto;
   scrollbar-width: none;
   padding: 2px 0;
-  max-width: 645px;
+  width: 100%;
+  max-width: 100%;
 }
 
 .thumbnailRow::-webkit-scrollbar {
@@ -762,6 +773,36 @@
   padding: 20px 10px;
 }
 
+.bottomBannerSection {
+  padding: 20px 10px 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.productBannerCenter {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+}
+
+.desktopBannerWrapper {
+  display: block;
+  width: 100%;
+}
+
+.mobileBannerWrapper {
+  display: none;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.mobileBannerImage {
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+  object-fit: cover;
+}
+
 .relatedGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1159,11 +1200,11 @@
 /* 1024px — tighten padding */
 @media (max-width: 1024px) {
   .gallerySection {
-    padding: 28px 20px 28px 24px;
+    padding: 20px 20px 20px 24px;
   }
 
   .infoSection {
-    padding: 36px 24px 36px 20px;
+    padding: 20px 24px 36px 20px;
   }
 
   .productTitle {
@@ -1183,10 +1224,19 @@
 @media (max-width: 900px) {
   .productGrid {
     grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .galleryColumn {
+    position: static;
+  }
+
+  .gallerySticky {
+    position: static;
+    top: auto;
   }
 
   .gallerySection {
-    position: static;
     padding: 10px 10px;
   }
 
@@ -1217,6 +1267,18 @@
   .lookSection {
     padding-left: 10px;
     padding-right: 10px;
+  }
+
+  .bottomBannerSection {
+    padding: 12px 10px 0;
+  }
+
+  .desktopBannerWrapper {
+    display: none;
+  }
+
+  .mobileBannerWrapper {
+    display: block;
   }
 }
 

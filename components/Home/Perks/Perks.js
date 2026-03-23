@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './Perks.module.css';
 import Image from 'next/image';
 
-const Perks = ({banner}) => {
+const Perks = ({ banner, className = "", containerStyle = undefined }) => {
   const [loading, setLoading] = useState(false);
   const modifyCloudinaryUrl = (url) => {
     if (!url) return "";
@@ -16,11 +16,19 @@ const Perks = ({banner}) => {
   };
 
   if (loading || !banner) {
-    return <div className={styles.imageBannerSection} style={{ minHeight: '300px' }}></div>;
+    return (
+      <div
+        className={`${styles.imageBannerSection} ${className}`.trim()}
+        style={{ minHeight: '300px', ...containerStyle }}
+      ></div>
+    );
   }
 
   return (
-    <div className={styles.imageBannerSection}>
+    <div
+      className={`${styles.imageBannerSection} ${className}`.trim()}
+      style={containerStyle}
+    >
       <Image
         src={modifyCloudinaryUrl(banner?.url)}
         alt="Enjoy the perks"
