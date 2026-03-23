@@ -3,6 +3,7 @@ import Image from 'next/image';
 import styles from './blogs.module.css'
 import Link from 'next/link';
 import { Calendar, ArrowRight } from 'lucide-react';
+import { normalizeImageUrl } from '@/lib/imageUtils';
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,7 @@ export const metadata = {
     url: "https://unmejewels.com/blogs",
     images: [
       {
-        url: "https://res.cloudinary.com/dkfkwavmc/image/upload/v1764335143/ltdeffqpngw1punwn9o4.png",
+        url: "https://d2gtpgxs0y565n.cloudfront.net/v1764335143/ltdeffqpngw1punwn9o4.png",
         width: 1200,
         height: 630,
         alt: "U n Me Jewelry Collection",
@@ -62,10 +63,28 @@ const BlogsPage = async() => {
   }
 
   const modifyCloudinaryUrl = (url) => {
-    if (!url) return '';
-    const urlParts = url?.split('/upload/');
-    return urlParts && `${urlParts[0]}/upload/c_limit,h_800,f_auto,q_40/${urlParts[1]}`;
-  };
+  if (!url) return '';
+  const cloudfront = process.env.NEXT_PUBLIC_CLOUDFRONT_URL || 'https://d2gtpgxs0y565n.cloudfront.net';
+  
+  // Check if it's an S3 URL - convert to CloudFront
+  if (url.includes('s3.') || url.includes('amazonaws.com')) {
+    try {
+      const urlObj = new URL(url);
+      const pathname = urlObj.pathname;
+      return `${cloudfront}${pathname}`;
+    } catch (e) {
+      return url;
+    }
+  }
+  
+  // Apply Cloudinary transformations for Cloudinary URLs
+  if (!url.includes('/upload/')) return url;
+  const urlParts = url.split('/upload/');
+  if (urlParts.length === 2) {
+    return `${urlParts[0]}/upload/c_limit,h_1000,f_auto,q_50/${urlParts[1]}`;
+  }
+  return url;
+};
 
   return (
     <div className={styles.blogsPage}>

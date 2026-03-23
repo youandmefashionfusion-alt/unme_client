@@ -13,6 +13,7 @@ import {
   Eye,
   X
 } from 'lucide-react';
+import { normalizeImageUrl } from '@/lib/imageUtils';
 import {
   fetchWishlist,
   removeFromWishlist,
@@ -72,9 +73,28 @@ const WishlistPage = () => {
   };
 
   const modifyCloudinaryUrl = (url) => {
-    const urlParts = url?.split('/upload/');
-    return urlParts && `${urlParts[0]}/upload/c_limit,h_1000,f_auto,q_50/${urlParts[1]}`;
-  };
+  if (!url) return '';
+  const cloudfront = process.env.NEXT_PUBLIC_CLOUDFRONT_URL || 'https://d2gtpgxs0y565n.cloudfront.net';
+  
+  // Check if it's an S3 URL - convert to CloudFront
+  if (url.includes('s3.') || url.includes('amazonaws.com')) {
+    try {
+      const urlObj = new URL(url);
+      const pathname = urlObj.pathname;
+      return `${cloudfront}${pathname}`;
+    } catch (e) {
+      return url;
+    }
+  }
+  
+  // Apply Cloudinary transformations for Cloudinary URLs
+  if (!url.includes('/upload/')) return url;
+  const urlParts = url.split('/upload/');
+  if (urlParts.length === 2) {
+    return `${urlParts[0]}/upload/c_limit,h_1000,f_auto,q_50/${urlParts[1]}`;
+  }
+  return url;
+};
 
   if (loading) {
     return (

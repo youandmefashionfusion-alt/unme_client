@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./HeroSection.module.css";
+import { normalizeImageUrl } from '@/lib/imageUtils';
 
 const HeroSection = ({ mobileBanners, desktopBanners }) => {
   const [activeSlide, setActiveSlide] = useState(0);
@@ -96,12 +97,28 @@ const HeroSection = ({ mobileBanners, desktopBanners }) => {
   };
 
   const modifyCloudinaryUrl = (url) => {
-    if (!url) return "";
-    const urlParts = url.split("/upload/");
-    return urlParts.length === 2
-      ? `${urlParts[0]}/upload/c_limit,f_auto,q_40/${urlParts[1]}`
-      : url;
-  };
+  if (!url) return '';
+  const cloudfront = process.env.NEXT_PUBLIC_CLOUDFRONT_URL || 'https://d2gtpgxs0y565n.cloudfront.net';
+  
+  // Check if it's an S3 URL - convert to CloudFront
+  if (url.includes('s3.') || url.includes('amazonaws.com')) {
+    try {
+      const urlObj = new URL(url);
+      const pathname = urlObj.pathname;
+      return `${cloudfront}${pathname}`;
+    } catch (e) {
+      return url;
+    }
+  }
+  
+  // Apply Cloudinary transformations for Cloudinary URLs
+  if (!url.includes('/upload/')) return url;
+  const urlParts = url.split('/upload/');
+  if (urlParts.length === 2) {
+    return `${urlParts[0]}/upload/c_limit,h_1000,f_auto,q_50/${urlParts[1]}`;
+  }
+  return url;
+};
 
   const handleImageLoad = (index) => {
     setImageLoadStatus(prev => ({ ...prev, [index]: true }));

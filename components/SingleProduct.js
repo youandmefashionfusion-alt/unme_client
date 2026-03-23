@@ -17,6 +17,31 @@ import { GTM } from '@/lib/gtm'
 import Link from 'next/link'
 import Perks from './Home/Perks/Perks'
 
+// ── Moved OUTSIDE component so it's stable and never re-created on render ──
+const modifyCloudinaryUrl = (url) => {
+  if (!url) return ''
+  const cloudfront =
+    process.env.NEXT_PUBLIC_CLOUDFRONT_URL || 'https://d2gtpgxs0y565n.cloudfront.net'
+
+  // S3 URL → CloudFront
+  if (url.includes('s3.') || url.includes('amazonaws.com')) {
+    try {
+      const urlObj = new URL(url)
+      return `${cloudfront}${urlObj.pathname}`
+    } catch {
+      return url
+    }
+  }
+
+  // Cloudinary URL → add transformations
+  if (!url.includes('/upload/')) return url
+  const parts = url.split('/upload/')
+  if (parts.length === 2) {
+    return `${parts[0]}/upload/c_limit,h_1000,f_auto,q_50/${parts[1]}`
+  }
+  return url
+}
+
 const SingleProduct = ({ product, products, latestProducts }) => {
   const dispatch = useDispatch()
   const { items: cartItems } = useSelector((state) => state.cart)
@@ -41,6 +66,7 @@ const SingleProduct = ({ product, products, latestProducts }) => {
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [bottomBanner, setBottomBanner] = useState(null)
+
   const fileInputRef = useRef(null)
   const galleryColumnRef = useRef(null)
   const galleryStickyRef = useRef(null)
@@ -64,6 +90,10 @@ const SingleProduct = ({ product, products, latestProducts }) => {
         ? product.ringSize
         : []
 
+  const isVideo = (url) => url?.match(/\.(mp4|webm|ogg)$/i)
+  const shareUrl = typeof window !== 'undefined' ? window.location.href : ''
+
+  // ── Handlers ─────────────────────────────────────────────
   const handleQuantityChange = (type) => {
     if (type === 'increase' && product?.quantity > quantity) setQuantity(q => q + 1)
     else if (type === 'decrease' && quantity > 1) setQuantity(q => q - 1)
@@ -72,32 +102,34 @@ const SingleProduct = ({ product, products, latestProducts }) => {
   const handleAddToCart = () => {
     if (existingCartItem) {
       dispatch(updateCartItem({ productId: product._id, quantity: existingCartItem.quantity + quantity }))
-      toast.success("Cart updated!")
+      toast.success('Cart updated!')
     } else {
       dispatch(addToCart({ product, productId: product._id, quantity }))
-      toast.success("Added to cart!")
+      toast.success('Added to cart!')
     }
     GTM.addToCart({
-      item_id: product._id, item_name: product.title,
+      item_id: product._id,
+      item_name: product.title,
       item_category: product.collectionName?.title,
-      price: product.price, quantity,
+      price: product.price,
+      quantity,
     })
   }
 
   const handleRemoveFromCart = () => {
     dispatch(removeFromCart(product._id))
-    toast.success("Removed from cart")
+    toast.success('Removed from cart')
   }
 
   const handleWishlistToggle = () => {
     if (isInWishlist) {
-      dispatch(removeFromWishlist(product._id));
-      toast.success("Removed from wishlist!");
+      dispatch(removeFromWishlist(product._id))
+      toast.success('Removed from wishlist!')
     } else {
-      dispatch(addToWishlist({ product }));  // ✅ correct payload
-      toast.success("Saved to wishlist!");
+      dispatch(addToWishlist({ product }))
+      toast.success('Saved to wishlist!')
     }
-  };
+  }
 
   const handleBuyNow = () => {
     dispatch(addToCart({ product, productId: product._id, quantity }))
@@ -113,46 +145,15 @@ const SingleProduct = ({ product, products, latestProducts }) => {
     }
   }
 
-  const isVideo = (url) => url?.match(/\.(mp4|webm|ogg)$/i)
-  const shareUrl = typeof window !== 'undefined' ? window.location.href : ''
-
-  const shareOptions = [
-    {
-      name: 'Facebook', icon: Facebook, color: '#1877F2',
-      share: () => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank', 'width=600,height=400'),
-    },
-    {
-      name: 'Twitter', icon: Twitter, color: '#1DA1F2',
-      share: () => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(product?.title)}&url=${encodeURIComponent(shareUrl)}`, '_blank', 'width=600,height=400'),
-    },
-    {
-      name: 'WhatsApp', icon: MessageCircle, color: '#25D366',
-      share: () => window.open(`https://wa.me/?text=${encodeURIComponent(`${product?.title} ${shareUrl}`)}`, '_blank', 'width=600,height=400'),
-    },
-  ]
-
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(shareUrl)
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
-    } catch (err) { }
+    } catch { }
   }
 
-  // ── Review handlers ──────────────────────────────────────
-  const averageRating = product?.totalRating || (product?.ratings?.length
-    ? (product.ratings.reduce((s, r) => s + r.star, 0) / product.ratings.length)
-    : 5)
-
-  const ratingBreakdown = [5, 4, 3, 2, 1].map(star => ({
-    star,
-    count: product?.ratings?.filter(r => r.star === star).length || 0,
-    pct: product?.ratings?.length
-      ? Math.round((product.ratings.filter(r => r.star === star).length / product.ratings.length) * 100)
-      : 0,
-  }))
-
-  const handleImageUpload = async (e) => {
+  const handleImageUpload = (e) => {
     const file = e.target.files?.[0]
     if (!file) return
     if (!file.type.startsWith('image/')) { toast.error('Please upload an image file'); return }
@@ -187,13 +188,27 @@ const SingleProduct = ({ product, products, latestProducts }) => {
       } else {
         toast.error('Failed to post review. Try again.')
       }
-    } catch (err) {
+    } catch {
       toast.error('Something went wrong')
     } finally {
       setSubmitting(false)
     }
   }
 
+  // ── Ratings ───────────────────────────────────────────────
+  const averageRating = product?.totalRating || (product?.ratings?.length
+    ? (product.ratings.reduce((s, r) => s + r.star, 0) / product.ratings.length)
+    : 5)
+
+  const ratingBreakdown = [5, 4, 3, 2, 1].map(star => ({
+    star,
+    count: product?.ratings?.filter(r => r.star === star).length || 0,
+    pct: product?.ratings?.length
+      ? Math.round((product.ratings.filter(r => r.star === star).length / product.ratings.length) * 100)
+      : 0,
+  }))
+
+  // ── Accordions ────────────────────────────────────────────
   const accordions = [
     {
       key: 'description', label: 'Description',
@@ -220,12 +235,28 @@ const SingleProduct = ({ product, products, latestProducts }) => {
     },
   ]
 
+  // ── Share options ─────────────────────────────────────────
+  const shareOptions = [
+    {
+      name: 'Facebook', icon: Facebook, color: '#1877F2',
+      share: () => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank', 'width=600,height=400'),
+    },
+    {
+      name: 'Twitter', icon: Twitter, color: '#1DA1F2',
+      share: () => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(product?.title)}&url=${encodeURIComponent(shareUrl)}`, '_blank', 'width=600,height=400'),
+    },
+    {
+      name: 'WhatsApp', icon: MessageCircle, color: '#25D366',
+      share: () => window.open(`https://wa.me/?text=${encodeURIComponent(`${product?.title} ${shareUrl}`)}`, '_blank', 'width=600,height=400'),
+    },
+  ]
+
+  // ── Effects ───────────────────────────────────────────────
   useEffect(() => {
     const fetchBottomBanner = async () => {
       try {
         const response = await fetch('/api/home/banners', { cache: 'no-store' })
         const data = await response.json()
-
         if (data?.success) {
           const otherBanners = data?.banners?.[0]?.otherBanners || []
           setBottomBanner(otherBanners[4] || otherBanners[otherBanners.length - 1] || null)
@@ -234,7 +265,6 @@ const SingleProduct = ({ product, products, latestProducts }) => {
         console.error('Error fetching product page banner:', error)
       }
     }
-
     fetchBottomBanner()
   }, [])
 
@@ -259,44 +289,27 @@ const SingleProduct = ({ product, products, latestProducts }) => {
 
     const updateSticky = () => {
       rafId = null
-
-      if (!desktopQuery.matches) {
-        resetSticky()
-        return
-      }
+      if (!desktopQuery.matches) { resetSticky(); return }
 
       const stickyHeight = stickyEl.offsetHeight
       const infoRect = infoEl.getBoundingClientRect()
       const infoTop = window.scrollY + infoRect.top
       const infoBottom = infoTop + infoEl.offsetHeight
       const columnRect = columnEl.getBoundingClientRect()
-
       const start = infoTop - STICKY_TOP
       const end = infoBottom - STICKY_TOP - stickyHeight
 
       columnEl.style.minHeight = `${Math.max(infoEl.offsetHeight, stickyHeight)}px`
 
-      if (end <= start) {
-        resetSticky()
-        return
-      }
-
-      if (window.scrollY <= start) {
-        resetSticky()
-        return
-      }
+      if (end <= start || window.scrollY <= start) { resetSticky(); return }
 
       stickyEl.style.position = 'fixed'
       stickyEl.style.left = `${Math.round(columnRect.left)}px`
       stickyEl.style.width = `${Math.round(columnRect.width)}px`
       stickyEl.style.zIndex = '2'
-
-      if (window.scrollY < end) {
-        stickyEl.style.top = `${STICKY_TOP}px`
-      } else {
-        const topAfterEnd = STICKY_TOP - (window.scrollY - end)
-        stickyEl.style.top = `${topAfterEnd}px`
-      }
+      stickyEl.style.top = window.scrollY < end
+        ? `${STICKY_TOP}px`
+        : `${STICKY_TOP - (window.scrollY - end)}px`
     }
 
     const requestUpdate = () => {
@@ -314,9 +327,7 @@ const SingleProduct = ({ product, products, latestProducts }) => {
     }
 
     return () => {
-      if (rafId !== null) {
-        window.cancelAnimationFrame(rafId)
-      }
+      if (rafId !== null) window.cancelAnimationFrame(rafId)
       window.removeEventListener('scroll', requestUpdate)
       window.removeEventListener('resize', requestUpdate)
       if (desktopQuery.removeEventListener) {
@@ -328,6 +339,7 @@ const SingleProduct = ({ product, products, latestProducts }) => {
     }
   }, [openAccordion, selectedIndex, mediaList.length])
 
+  // ── Render ────────────────────────────────────────────────
   return (
     <div className={styles.productPage}>
 
@@ -339,9 +351,11 @@ const SingleProduct = ({ product, products, latestProducts }) => {
           <div className={styles.gallerySticky} ref={galleryStickyRef}>
             <div className={styles.gallerySection}>
               <div className={styles.mainImageWrap}>
+
                 {discountPercent > 0 && (
                   <span className={styles.saveBadge}>SAVE {discountPercent}%</span>
                 )}
+
                 <div className={styles.imageActionGroup}>
                   <button className={styles.imageActionBtn} onClick={() => setShowShareOptions(true)} aria-label="Share">
                     <Share2 size={16} />
@@ -355,15 +369,16 @@ const SingleProduct = ({ product, products, latestProducts }) => {
                   </button>
                 </div>
 
+                {/* ✅ FIX: modifyCloudinaryUrl applied to main image */}
                 {mediaList[selectedIndex] && (
                   isVideo(mediaList[selectedIndex]?.url) ? (
                     <video controls className={styles.mainImage}>
-                      <source src={mediaList[selectedIndex]?.url} />
+                      <source src={modifyCloudinaryUrl(mediaList[selectedIndex]?.url)} />
                     </video>
                   ) : (
                     <Image
-                      src={mediaList[selectedIndex]?.url}
-                      alt={product?.title}
+                      src={modifyCloudinaryUrl(mediaList[selectedIndex]?.url)}
+                      alt={product?.title || 'Product image'}
                       className={styles.mainImage}
                       fill
                       sizes="(max-width: 900px) 100vw, 48vw"
@@ -373,6 +388,7 @@ const SingleProduct = ({ product, products, latestProducts }) => {
                 )}
               </div>
 
+              {/* ✅ FIX: modifyCloudinaryUrl applied to thumbnails */}
               {mediaList.length > 1 && (
                 <div className={styles.thumbnailRow}>
                   {mediaList.map((media, idx) => (
@@ -383,9 +399,15 @@ const SingleProduct = ({ product, products, latestProducts }) => {
                       aria-label={`View image ${idx + 1}`}
                     >
                       {isVideo(media?.url) ? (
-                        <video src={media?.url} muted className={styles.thumbMedia} />
+                        <video src={modifyCloudinaryUrl(media?.url)} muted className={styles.thumbMedia} />
                       ) : (
-                        <Image src={media?.url} alt={`View ${idx + 1}`} className={styles.thumbMedia} width={90} height={90} />
+                        <Image
+                          src={modifyCloudinaryUrl(media?.url)}
+                          alt={`View ${idx + 1}`}
+                          className={styles.thumbMedia}
+                          width={90}
+                          height={90}
+                        />
                       )}
                     </button>
                   ))}
@@ -452,10 +474,11 @@ const SingleProduct = ({ product, products, latestProducts }) => {
             </div>
           </div>
 
-          {/* Action Buttons (Desktop) */}
+          {/* Action Buttons */}
           <div className={styles.actionButtons}>
-            <button className={styles.buyNowBtn} onClick={handleBuyNow} disabled={product?.quantity === 0}>Buy It Now</button>
-
+            <button className={styles.buyNowBtn} onClick={handleBuyNow} disabled={product?.quantity === 0}>
+              Buy It Now
+            </button>
             {existingCartItem ? (
               <button className={styles.removeBtn} onClick={handleRemoveFromCart}>Remove from Cart</button>
             ) : (
@@ -493,7 +516,10 @@ const SingleProduct = ({ product, products, latestProducts }) => {
                   onClick={() => setOpenAccordion(openAccordion === key ? null : key)}
                 >
                   <span className={styles.accordionTitle}>{label}</span>
-                  <ChevronDown size={16} className={`${styles.accordionChevron} ${openAccordion === key ? styles.chevronOpen : ''}`} />
+                  <ChevronDown
+                    size={16}
+                    className={`${styles.accordionChevron} ${openAccordion === key ? styles.chevronOpen : ''}`}
+                  />
                 </button>
                 {openAccordion === key && (
                   <div className={styles.accordionContent}>{content}</div>
@@ -505,6 +531,7 @@ const SingleProduct = ({ product, products, latestProducts }) => {
         </div>
       </div>
 
+      {/* Bottom Banner */}
       <section className={styles.bottomBannerSection}>
         <div className={styles.mobileBannerWrapper}>
           <Image
@@ -515,7 +542,6 @@ const SingleProduct = ({ product, products, latestProducts }) => {
             className={styles.mobileBannerImage}
           />
         </div>
-
         {bottomBanner && (
           <div className={styles.desktopBannerWrapper}>
             <Perks
@@ -553,14 +579,13 @@ const SingleProduct = ({ product, products, latestProducts }) => {
         </div>
       </section>
 
-      {/* ── Ratings Summary + Reviews ── */}
+      {/* ── Customer Reviews ── */}
       <section className={styles.reviewsSection}>
-        <div className={styles.sectionHeading} style={{ padding: '0 0 0 0' }}>
+        <div className={styles.sectionHeading} style={{ padding: '0' }}>
           <h2 className={styles.sectionTitle}>Customer Reviews</h2>
           <div className={styles.sectionLine} />
         </div>
 
-        {/* Rating Overview */}
         <div className={styles.ratingOverview}>
           <div className={styles.ratingBig}>
             <span className={styles.ratingBigNum}>{Number(averageRating).toFixed(1)}</span>
@@ -568,13 +593,11 @@ const SingleProduct = ({ product, products, latestProducts }) => {
               {[1, 2, 3, 4, 5].map(s => (
                 <Star key={s} size={18}
                   fill={s <= Math.round(averageRating) ? '#C9A84C' : 'none'}
-                  stroke={s <= Math.round(averageRating) ? '#C9A84C' : '#C9A84C'}
+                  stroke='#C9A84C'
                 />
               ))}
             </div>
-            <span className={styles.ratingBigCount}>
-              {product?.ratings?.length || 0} reviews
-            </span>
+            <span className={styles.ratingBigCount}>{product?.ratings?.length || 0} reviews</span>
           </div>
           <div className={styles.ratingBars}>
             {ratingBreakdown.map(({ star, count, pct }) => (
@@ -589,8 +612,7 @@ const SingleProduct = ({ product, products, latestProducts }) => {
           </div>
         </div>
 
-        {/* Reviews List */}
-        {product?.ratings && product.ratings.length > 0 ? (
+        {product?.ratings?.length > 0 ? (
           <div className={styles.reviewsList}>
             {product.ratings.map((r, i) => (
               <div key={i} className={styles.reviewCard}>
@@ -610,12 +632,21 @@ const SingleProduct = ({ product, products, latestProducts }) => {
                     </div>
                   </div>
                   <span className={styles.reviewDate}>
-                    {r.createdAt ? new Date(r.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
+                    {r.createdAt
+                      ? new Date(r.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+                      : ''}
                   </span>
                 </div>
+                {/* ✅ FIX: modifyCloudinaryUrl applied to review images */}
                 {r.image && (
                   <div className={styles.reviewImageWrap}>
-                    <Image src={r.image} alt={r.name} width={100} height={100} className={styles.reviewImg} />
+                    <Image
+                      src={modifyCloudinaryUrl(r.image)}
+                      alt={r.name}
+                      width={100}
+                      height={100}
+                      className={styles.reviewImg}
+                    />
                   </div>
                 )}
                 <p className={styles.reviewComment}>{r.comment}</p>
@@ -629,7 +660,7 @@ const SingleProduct = ({ product, products, latestProducts }) => {
 
       {/* ── Write a Review ── */}
       <section className={styles.writeReviewSection}>
-        <div className={styles.sectionHeading} style={{ padding: '0 0 0 0' }}>
+        <div className={styles.sectionHeading} style={{ padding: '0' }}>
           <h2 className={styles.sectionTitle}>Write a Review</h2>
           <div className={styles.sectionLine} />
         </div>
@@ -641,13 +672,13 @@ const SingleProduct = ({ product, products, latestProducts }) => {
           </div>
         ) : (
           <div className={styles.reviewForm}>
-            {/* Name + Email row */}
             <div className={styles.formRow}>
               <div className={styles.formField}>
                 <label className={styles.formLabel}>Your Name *</label>
                 <input
                   className={styles.formInput}
-                  type="text" placeholder="e.g. Priya S."
+                  type="text"
+                  placeholder="e.g. Priya S."
                   value={reviewName}
                   onChange={e => setReviewName(e.target.value)}
                 />
@@ -656,20 +687,21 @@ const SingleProduct = ({ product, products, latestProducts }) => {
                 <label className={styles.formLabel}>Email (optional)</label>
                 <input
                   className={styles.formInput}
-                  type="email" placeholder="yourname@email.com"
+                  type="email"
+                  placeholder="yourname@email.com"
                   value={reviewEmail}
                   onChange={e => setReviewEmail(e.target.value)}
                 />
               </div>
             </div>
 
-            {/* Star picker */}
             <div className={styles.formField}>
               <label className={styles.formLabel}>Your Rating *</label>
               <div className={styles.starPicker}>
                 {[1, 2, 3, 4, 5].map(s => (
                   <button
-                    key={s} type="button"
+                    key={s}
+                    type="button"
                     className={styles.starPickerBtn}
                     onMouseEnter={() => setHoverStar(s)}
                     onMouseLeave={() => setHoverStar(0)}
@@ -690,7 +722,6 @@ const SingleProduct = ({ product, products, latestProducts }) => {
               </div>
             </div>
 
-            {/* Review text */}
             <div className={styles.formField}>
               <label className={styles.formLabel}>Your Review *</label>
               <textarea
@@ -702,11 +733,11 @@ const SingleProduct = ({ product, products, latestProducts }) => {
               />
             </div>
 
-            {/* Image upload */}
             <div className={styles.formField}>
               <label className={styles.formLabel}>Add a Photo (optional)</label>
               {reviewImage ? (
                 <div className={styles.previewWrap}>
+                  {/* review preview is base64 — no need for modifyCloudinaryUrl */}
                   <Image src={reviewImage} alt="Preview" width={100} height={100} className={styles.previewImg} />
                   <button className={styles.removePreview} onClick={() => setReviewImage('')} type="button">
                     <X size={14} />
@@ -723,8 +754,10 @@ const SingleProduct = ({ product, products, latestProducts }) => {
                 </button>
               )}
               <input
-                ref={fileInputRef} type="file"
-                accept="image/*" className={styles.fileInputHidden}
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className={styles.fileInputHidden}
                 onChange={handleImageUpload}
               />
             </div>
@@ -740,7 +773,7 @@ const SingleProduct = ({ product, products, latestProducts }) => {
         )}
       </section>
 
-      {/* Sticky Mobile Bar */}
+      {/* ── Sticky Mobile Bar ── */}
       <div className={styles.stickyBar}>
         <div className={styles.stickyLeft}>
           <span className={styles.stickyPrice}>₹{product?.price?.toLocaleString()}</span>
@@ -757,18 +790,23 @@ const SingleProduct = ({ product, products, latestProducts }) => {
               disabled={product?.quantity === 0}
             >
               Add to Cart
-            </button>)}
-          <button className={styles.stickyBuy} onClick={handleBuyNow} disabled={product?.quantity === 0}>Buy Now</button>
+            </button>
+          )}
+          <button className={styles.stickyBuy} onClick={handleBuyNow} disabled={product?.quantity === 0}>
+            Buy Now
+          </button>
         </div>
       </div>
 
-      {/* Share Modal */}
+      {/* ── Share Modal ── */}
       {showShareOptions && (
         <div className={styles.modalOverlay} onClick={() => setShowShareOptions(false)}>
           <div className={styles.shareModal} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHeader}>
               <h3 className={styles.modalTitle}>Share</h3>
-              <button className={styles.modalClose} onClick={() => setShowShareOptions(false)}><X size={18} /></button>
+              <button className={styles.modalClose} onClick={() => setShowShareOptions(false)}>
+                <X size={18} />
+              </button>
             </div>
             <div className={styles.shareIcons}>
               {shareOptions.map((opt, i) => {
@@ -785,7 +823,9 @@ const SingleProduct = ({ product, products, latestProducts }) => {
             </div>
             <div className={styles.copyRow}>
               <input className={styles.copyInput} type="text" value={shareUrl} readOnly />
-              <button className={styles.copyBtn} onClick={copyToClipboard}>{copied ? '✓ Copied' : 'Copy'}</button>
+              <button className={styles.copyBtn} onClick={copyToClipboard}>
+                {copied ? '✓ Copied' : 'Copy'}
+              </button>
             </div>
           </div>
         </div>

@@ -1,21 +1,45 @@
-// DealsByBudget.tsx
+// DealsofBudget.js
 import React from "react";
 import Link from "next/link";
 import Heading from "../../ui/Heading/Heading";
+
+const modifyCloudinaryUrl = (url) => {
+  if (!url) return "/images/fallback-banner.jpg";
+  const cloudfront =
+    process.env.NEXT_PUBLIC_CLOUDFRONT_URL || "https://d2gtpgxs0y565n.cloudfront.net";
+
+  // S3 URL → CloudFront
+  if (url.includes("s3.") || url.includes("amazonaws.com")) {
+    try {
+      const urlObj = new URL(url);
+      return `${cloudfront}${urlObj.pathname}`;
+    } catch {
+      return url;
+    }
+  }
+
+  // Cloudinary URL → add transformations
+  if (!url.includes("/upload/")) return url;
+  const parts = url.split("/upload/");
+  if (parts.length === 2) {
+    return `${parts[0]}/upload/c_limit,h_1000,f_auto,q_50/${parts[1]}`;
+  }
+  return url;
+};
 
 const DealsByBudget = ({ banners }) => {
   const budgetCategories = [
     {
       link: "/search?priceRange=0-399",
-      banner: banners?.[0]?.url || "/images/fallback-banner.jpg",
+      banner: modifyCloudinaryUrl(banners?.[0]?.url),
     },
     {
       link: "/search?priceRange=0-499",
-      banner: banners?.[1]?.url || "/images/fallback-banner.jpg",
+      banner: modifyCloudinaryUrl(banners?.[1]?.url),
     },
     {
       link: "/search?priceRange=0-599",
-      banner: banners?.[2]?.url || "/images/fallback-banner.jpg",
+      banner: modifyCloudinaryUrl(banners?.[2]?.url),
     },
   ];
 
@@ -29,8 +53,7 @@ const DealsByBudget = ({ banners }) => {
 
           {/* LEFT COLUMN */}
           <div className="flex flex-col gap-3">
-
-            {budgetCategories?.slice(0, 2)?.map((category, index) => (
+            {budgetCategories.slice(0, 2).map((category, index) => (
               <Link
                 key={index}
                 href={category.link}
@@ -41,13 +64,9 @@ const DealsByBudget = ({ banners }) => {
                   backgroundPosition: "center",
                 }}
               >
-
-                {/* Overlay */}
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition" />
-
               </Link>
             ))}
-
           </div>
 
           {/* RIGHT COLUMN */}

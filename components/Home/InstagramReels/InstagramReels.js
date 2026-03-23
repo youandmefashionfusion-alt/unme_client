@@ -2,12 +2,37 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import styles from "./InstagramReels.module.css";
-import { Play, Image as ImageIcon, ExternalLink, X, Instagram } from "lucide-react";
+import { ExternalLink, X, Instagram } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import Heading from "../../ui/Heading/Heading";
 
 const INSTAGRAM_PROFILE = "https://www.instagram.com/unme.jewels/";
+
+// ── Converts S3 URLs to CloudFront. Leaves all other URLs untouched. ──
+const modifyCloudinaryUrl = (url) => {
+  if (!url) return "";
+  const cloudfront =
+    process.env.NEXT_PUBLIC_CLOUDFRONT_URL || "https://d2gtpgxs0y565n.cloudfront.net";
+
+  // S3 → CloudFront
+  if (url.includes("s3.") || url.includes("amazonaws.com")) {
+    try {
+      const urlObj = new URL(url);
+      return `${cloudfront}${urlObj.pathname}`;
+    } catch {
+      return url;
+    }
+  }
+
+  // Cloudinary → add transformations
+  if (!url.includes("/upload/")) return url;
+  const parts = url.split("/upload/");
+  if (parts.length === 2) {
+    return `${parts[0]}/upload/c_limit,h_1000,f_auto,q_50/${parts[1]}`;
+  }
+  return url;
+};
 
 const InstagramReels = () => {
   const [media, setMedia] = useState([]);
@@ -16,23 +41,15 @@ const InstagramReels = () => {
   const [activeMedia, setActiveMedia] = useState(null);
   const [isModalClosing, setIsModalClosing] = useState(false);
   const [products, setProducts] = useState([]);
+
   const fetchInstagramMedia = useCallback(async () => {
     setLoading(true);
     setError(null);
-
     try {
       const res = await fetch("/api/home/instagram-reels", { cache: "no-store" });
-
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}: Failed to fetch Instagram media`);
-      }
-
+      if (!res.ok) throw new Error(`HTTP ${res.status}: Failed to fetch Instagram media`);
       const data = await res.json();
-
-      if (!data.success) {
-        throw new Error(data.message || "Failed to fetch Instagram media");
-      }
-
+      if (!data.success) throw new Error(data.message || "Failed to fetch Instagram media");
       setMedia(data.data || []);
       setProducts(data.latestProducts || []);
     } catch (err) {
@@ -58,19 +75,13 @@ const InstagramReels = () => {
     }
   }, [activeMedia]);
 
+  const handleKeyDown = useCallback((e) => {
+    if (e.key === "Escape" && activeMedia) closeModal();
+  }, [activeMedia, closeModal]);
+
   useEffect(() => {
     fetchInstagramMedia();
   }, [fetchInstagramMedia]);
-
-  const handleRetry = () => {
-    fetchInstagramMedia();
-  };
-
-  const handleKeyDown = useCallback((e) => {
-    if (e.key === "Escape" && activeMedia) {
-      closeModal();
-    }
-  }, [activeMedia, closeModal]);
 
   useEffect(() => {
     if (activeMedia) {
@@ -79,7 +90,6 @@ const InstagramReels = () => {
     } else {
       document.body.style.overflow = "unset";
     }
-
     return () => {
       document.body.style.overflow = "unset";
       window.removeEventListener("keydown", handleKeyDown);
@@ -101,7 +111,7 @@ const InstagramReels = () => {
         <div className={styles.errorContainer}>
           <div className={styles.errorIcon}>⚠️</div>
           <p className={styles.errorText}>{error}</p>
-          <button className={styles.retryButton} onClick={handleRetry}>
+          <button className={styles.retryButton} onClick={fetchInstagramMedia}>
             Try Again
           </button>
         </div>
@@ -127,45 +137,56 @@ const InstagramReels = () => {
 
     return (
       <div className={styles.grid}>
-        {media.map((item, index) => (
-          <button
-            key={item.id}
-            className={styles.card}
-            onClick={() => setActiveMedia(item)}
-            style={{ animationDelay: `${index * 0.05}s` }}
-            aria-label={`View ${item.media_type === "IMAGE" ? "image" : "video"} post`}
-          >
-            <div className={styles.imageContainer}>
-              <video
-                src={item.media_url}
-                controls={false}
-                autoPlay = {true}
-                muted
-                loop
-                playsInline
-                // className={styles.modalVideo}
-                className={styles.image}
-              />
-              {/* <img
-                src={item.thumbnail_url || item.media_url}
-                alt={item.caption?.substring(0, 100) || "Instagram post"}
-                className={styles.image}
-                loading="lazy"
-              /> */}
-              <div className={styles.overlay}>
-                <Link href={`/products/${products[index]?.handle}`}>
-                <div className={styles.productWrapper}>
-                 <Image src={products[index]?.images[0]?.url} alt={products[index]?.title} width={200} height={200} className={styles.productImage}/>
-                 <div>
-                  <p className={styles.productTitle}>{products[index]?.title}</p>
-                  <p className={styles.productPrice}>₹{products[index]?.price}</p>
-                 </div>
-                </div>
-                </Link>
+        {media.map((item, index) => {
+          const product = products[index];
+          // ✅ FIX: product image is S3 — convert to CloudFront
+          const productImageUrl = modifyCloudinaryUrl(product?.images?.[0]?.url);
+
+          return (
+            <button
+              key={item.id}
+              className={styles.card}
+              onClick={() => setActiveMedia(item)}
+              style={{ animationDelay: `${index * 0.05}s` }}
+              aria-label={`View ${item.media_type === "IMAGE" ? "image" : "video"} post`}
+            >
+              <div className={styles.imageContainer}>
+                {/* Instagram video — uses their CDN URL directly, no conversion needed */}
+                <video
+                  src={item.media_url}
+                  controls={false}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className={styles.image}
+                />
+
+                {product && (
+                  <div className={styles.overlay}>
+                    <Link href={`/products/${product.handle}`}>
+                      <div className={styles.productWrapper}>
+                        {productImageUrl && (
+                          <Image
+                            src={productImageUrl}
+                            alt={product.title || "Product"}
+                            width={200}
+                            height={200}
+                            className={styles.productImage}
+                          />
+                        )}
+                        <div>
+                          <p className={styles.productTitle}>{product.title}</p>
+                          <p className={styles.productPrice}>₹{product.price}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                )}
               </div>
-            </div>
-          </button>
-        ))}
+            </button>
+          );
+        })}
       </div>
     );
   };
@@ -173,13 +194,14 @@ const InstagramReels = () => {
   return (
     <section className={styles.section} aria-label="Instagram Reels">
       <div className={styles.container}>
-        <Heading title="Follow Our Journey" subtitle="Discover our latest creations and behind-the-scenes moments"/>
+        <Heading
+          title="Follow Our Journey"
+          subtitle="Discover our latest creations and behind-the-scenes moments"
+        />
         <div className={styles.header}>
           <div className={styles.headerContent}>
             <h2 className={styles.title}></h2>
-            <p className={styles.subtitle}>
-              
-            </p>
+            <p className={styles.subtitle}></p>
             <a
               href={INSTAGRAM_PROFILE}
               target="_blank"
@@ -190,7 +212,6 @@ const InstagramReels = () => {
               <span>@unme.jewels</span>
             </a>
           </div>
-
         </div>
 
         {renderContent()}
@@ -198,7 +219,7 @@ const InstagramReels = () => {
 
       {/* Modal */}
       {activeMedia && (
-        <div className={`${styles.modalBackdrop} ${isModalClosing ? styles.closing : ''}`}>
+        <div className={`${styles.modalBackdrop} ${isModalClosing ? styles.closing : ""}`}>
           <div
             className={styles.modal}
             role="dialog"
@@ -217,11 +238,7 @@ const InstagramReels = () => {
                   <p className={styles.modalTimestamp}>Instagram</p>
                 </div>
               </div>
-              <button
-                onClick={closeModal}
-                className={styles.modalClose}
-                aria-label="Close modal"
-              >
+              <button onClick={closeModal} className={styles.modalClose} aria-label="Close modal">
                 <X size={24} />
               </button>
             </div>
@@ -229,6 +246,7 @@ const InstagramReels = () => {
             <div className={styles.modalContent}>
               <div className={styles.modalMedia}>
                 {activeMedia.media_type === "IMAGE" ? (
+                  // Instagram image — uses their CDN directly
                   <img
                     src={activeMedia.media_url}
                     alt={activeMedia.caption || "Instagram image"}
